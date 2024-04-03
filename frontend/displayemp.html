@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  
+ 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Bodhtree Employees</title>
+    <!-- <link rel="icon" type="image/png" href="../images/companylogo.png"> -->
+    <link rel="icon" type="image/x-icon" href="companylogo.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Information</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 10%;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div>
+        <figure><img src="https://bodhtree.com/wp-content/uploads/2016/02/logo-sticky.png"></figure>
+        <h4><b>Employee Information </b></h4>
+    </div>
+  <!-- <h2>Employee Information</h2> -->
+  <table id="employeeTable">
+    <thead>
+      <tr>
+        <th>Sl.no</th>
+        <th>fullName</th>
+        <th>reportsTo</th>
+        <th>designation</th>
+        <th>department</th>
+        <th>bloodGroup</th>
+        <th>dateOfJoining</th>
+        <th>workType</th>
+        <th>annual_ctc</th>
+        <th>officeEmail</th>
+        <th>workLocation</th>
+        <th>mobileNo</th>
+        <th>personal_Email</th>
+        <th>gender</th>
+        <th>native</th>
+        <th>enterCode</th>
+        <th>enterPassword</th>
+        <th>role</th>
+      </tr>
+    </thead>
+    <tbody id="employeeTableBody">
+      <!-- Employee data will be dynamically added here -->
+    </tbody>
+  </table>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const response = await fetch('http://localhost:4000/users');
+        if (response.ok) {
+          const employees = await response.json();
+          displayEmployees(employees);
+        } else {
+          console.error('Error fetching employees:', response.status, response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching employees:', error);
+      }
+    });
+
+    function displayEmployees(employees) {
+      const tableBody = document.getElementById('employeeTable');
+      employees.forEach((employee, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${user.fullName}</td>
+                <td>${user.reportsTo}</td>
+                <td>${user.designation}</td>
+                <td>${user.department}</td>
+                <td>${user.bloodGroup}</td>
+                <td>${user.dateOfJoining}</td>
+                <td>${user.workType}</td>
+                <td>${user.annual_ctc}</td>
+                <td>${user.officeEmail}</td>
+                <td>${user.workLocation}</td>
+                <td>${user.mobileNo}</td>
+                <td>${user.personal_Email}</td>
+                <td>${user.gender}</td>
+                <td>${user.native}</td>
+                <td>${user.enterCode}</td>
+                <td>${user.enterPassword}</td>
+                <td>${user.role}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+  </script>
+
+  <script>
+    try {
+        const response = await fetch('http://localhost:4000/dashboard');
+        if (response.ok) {
+          const disp = await response.json();
+        } else {
+          console.error('Error fetching employees:', response.status, response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching employees:', error);
+      }
+  </script>
+</body>
+</html>

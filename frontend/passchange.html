@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="./login.css" />
+    <title>Bodhtree</title>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <figure><img src="https://bodhtree.com/wp-content/uploads/2016/02/logo-sticky.png"></figure>
+        </div>
+        <form id="passwordResetForm">
+            <div class="mb-3">
+                <label for="officeEmail" class="form-label">Office Email</label>
+                <input type="email" name="officeEmail" id="officeEmail" class="form-control" placeholder="officeEmail">
+            </div>
+            <button type="button" id="generateOTPButton" class="btn btn-primary">Generate OTP</button><br>
+            <label for="otp">OTP:</label>
+            <input type="text" id="otp" name="otp" class="form-control" required><br>
+            <div class="mb-3">
+                <label for="newPassword">New Password:</label>
+                <input type="password" id="newPassword" name="newPassword" class="form-control" required><br>
+            </div>
+            <button type="submit" class="btn btn-primary">Change Password</button>
+        </form>
+    </div>
+
+    <div id="message"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to generate OTP
+            function generateOTP() {
+                const officeEmail = document.getElementById('officeEmail').value;
+
+                fetch('http://localhost:4000/generate-otp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ officeEmail: officeEmail })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to generate OTP');
+                    }
+                    return response.json(); // Parse response body as JSON
+                })
+                .then(data => {
+                    if (data && data.otp) {
+                        alert('OTP sent successfully: ' + data.otp); // Display OTP to user (for testing)
+                    } else {
+                        throw new Error('Failed to receive OTP from server');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error.message);
+                    alert('Failed to generate OTP. Please try again.');
+                });
+            }
+
+            // Add event listener to the Generate OTP button
+            document.getElementById('generateOTPButton').addEventListener('click', generateOTP);
+
+            // Add event listener to the form submission
+            document.getElementById('passwordResetForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const officeEmail = document.getElementById('officeEmail').value;
+                const otp = document.getElementById('otp').value;
+                const enterPassword = document.getElementById('newPassword').value;
+
+                fetch('http://localhost:4000/change-password', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ officeEmail: officeEmail, otp: otp, enterPassword: enterPassword })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to change password');
+                    }
+                    alert('Password changed successfully');
+                    document.getElementById('passwordResetForm').reset();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to change password');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

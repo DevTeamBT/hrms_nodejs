@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+a{
+    text-decoration: none;
+}
+.form-control{
+    border-color: grey;
+}
+button{
+    width: 100%;
+}
+.forgotpassword{
+    padding-left: 200px;
+}

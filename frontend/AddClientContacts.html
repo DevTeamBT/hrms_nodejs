@@ -1,0 +1,543 @@
+
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+ 
+<body>
+    <style>
+        body {
+            display:flex;
+        }
+        .flex-column {
+            background-color: lightgrey;
+            padding: 30px;
+            width: 16%;
+            transition: 0.5s;
+        } 
+    
+        .image {
+            margin-bottom: 20px;
+            padding-left: 10px;
+            padding-bottom: 10%;
+            width:100px;
+            
+        }
+    
+        .container {
+            font-size: large;
+            margin-top: 4%;
+            margin-left: 5%;
+            margin-right: 5%;
+            margin-bottom: 110px;
+            width: 80%;
+        }
+    
+        h4 {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+    
+        .table th {
+            padding-top: 15px;
+        }
+    
+        h5 {
+            margin-top: 14px;
+        }
+    
+        .login img {
+            height: 25px;
+            width: 25px;
+            margin-right: 20px;
+        }
+    
+        .login {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 10px;
+        }
+    
+        .table h4 {
+            padding-left: 10%;
+        }
+    
+        .nav-link {
+            font-size: large;
+            font-family: "Lato", sans-serif;
+            color: black;
+            padding-left: 25%;
+            padding-bottom: 20%;
+            position: relative;
+            display: block;
+            overflow: hidden;
+        }
+    
+        #subitems {
+            display: none;
+            position: relative;
+            padding-left: 10%;
+            font-family: Times, serif;
+        }
+    
+        .nav-link:hover #subitems {
+            display: block;
+        }
+    
+        #subitems li a {
+            font-size: medium;
+            text-decoration: none;
+            color: black;
+        }
+    
+        .openbtn {
+            text-decoration: none;
+            background-color: black;
+            margin-left: 105%;
+         
+            font-size: 17px;
+            cursor: pointer;
+            color: white;
+            border-radius: 10px;
+        } 
+    
+        .openbtn:hover {
+            background-color: #444;
+        }
+        
+    
+        #stateDropdown,
+        #cityDropdown {
+            width: 305px;
+            
+        } 
+    </style> 
+    <nav class="flex-column">
+        <div id="main">
+            <button class="openbtn" onclick="toggleNav()">Hide</button>
+        </div>
+        <img class="image" src="https://bodhtree.com/wp-content/uploads/2016/02/logo-sticky.png">
+        <a class="nav-link" href="#">Home</a>
+        <span class="nav-link">
+            Admin
+            <span id="subitems">
+                <ul>
+                    <li><a href="{% url 'login' %}">Hr</a></li>
+                    <li><a href="{% url 'login' %}">Sales</a></li>
+                    <li><a href="{% url 'login' %}">Recruting</a></li>
+                </ul>
+            </span>
+        </span>
+        <a class="nav-link" href="#">Tickets</a>
+        <a class="nav-link" href="#">Forums</a>
+        <a class="nav-link" href="#">Contacts</a>
+        </div>
+        <div class="login">
+            <h5>Profile</h5>
+            <img src="../static/user.png" />
+            <button type="button" class="btn btn-dark" id="logoutButton">Log Out</button>
+        </div>
+    </nav>
+    <div class="container ">
+        <h4>SALES</h4>
+        <form action="/api/client/contact" method="post" onsubmit="clientContact(event)">
+           
+            <div>
+                <table class="table" border="2px">
+                    <thead>
+                        <tr>
+                            <th colspan="4">
+                                <h4>Add Client Contacts</h4>
+                            </th>
+                            <td></td>
+                            <th></th>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Select Company</th>
+                                <td>
+                                    <select class="form-select" name="Select_Company" id="companyDropdown" onchange="updateCompanyDropdown()">
+                                        <option value="">Select Company Name</option>
+                                    </select>
+                                </td>
+                            <th>Select Country</th>
+                            <td><select id="countryDropdown" class="form-select" name="Select_Country">
+                                    <option value="">Select Any Country</option>
+                                    <option value="India">India</option>
+                                    <option value="US">US</option>
+                                    <option value="Singapore">Singapore</option>
+                                    <option value="Australia">Australia</option>
+                                </select></td>
+                        </tr>
+                        <tr>
+                            <th>Select State</th>
+                            <td><select id="stateDropdown" class="form-select" name="Select_State">
+                                    <option value="">Select State</option>
+                                </select></td>
+                            <th>Select City</th>
+                            <td><select id="cityDropdown" class="form-select" name="Select_City">
+                                    <option value="">Select Any City</option>
+                                </select></td>
+                        </tr>
+                        <tr>
+                            <th>First Name</th>
+                            <td><input type="text" class="form-control" id="firstname" name="First_Name"></td>
+                            <th>Last Name</th>
+                            <td><input type="text" class="form-control" id="lastname" name="Last_Name"></td>
+                        </tr>
+                        <tr>
+                            <th>Job Title</th>
+                            <td><input type="text" class="form-control" id="jobtitle" name="Job_Title"></td>
+                            <th>Department</th>
+                            <td><input type="text" class="form-control" id="department" name="Department"></td>
+                        </tr>
+                        <tr>
+                            <th>Email Id</th>
+                            <td><input type="email" class="form-control" id="emailid" name="Email_Id"></td>
+                            <th>Mobile No</th>
+                            <td><input type="number" class="form-control" id="mobileno" name="Mobile_No"></td>
+                        </tr>
+                        <tr>
+                            <th>Linkedin</th>
+                            <td><input type="url" class="form-control" id="linkedin" name="Linkedin"></td>
+                            <th>Select Source</th>
+                            <td><select class="form-select" name="Select_Source">
+                                    <option value="">Select Any Source</option>
+                                    <option value="Facebook">Facebook</option>
+                                    <option value="Twitter">Twitter</option>
+                                </select></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="padding-left:40%;">
+                <button type="submit" class="btn btn-primary col-sm-2">Submit</button>
+                <a href="/dashboard" class="btn btn-secondary col-sm-2">Cancel</a>
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            
+                        </div>
+                        <div class="col-sm-0 text-end mx-auto width=10px  height=10px">
+                            <a href="/api/client/req" class="btn btn-primary btn-lg">Proceed to requirement page</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        var sidebarOpen = true;
+        function toggleNav() {
+            var sidebar = document.querySelector(".flex-column");
+            var toggleBtn = document.querySelector(".openbtn");
+            if (sidebarOpen) {
+                sidebar.style.width = "0";
+                sidebar.style.padding = "0";
+                toggleBtn.textContent = "Show";
+            } else {
+                sidebar.style.width = "16%";
+                sidebar.style.padding = "30px";
+                toggleBtn.textContent = "Hide";
+
+            }
+            sidebarOpen = !sidebarOpen;
+        }
+        var countryDropdown = document.querySelector("#countryDropdown");
+      var stateDropdown = document.querySelector("#stateDropdown");
+      var cityDropdown = document.querySelector("#cityDropdown");
+
+
+      countryDropdown.addEventListener("change", function () {
+          var selectedCountry = countryDropdown.value;
+          updateStateDropdown(selectedCountry);
+      });
+      stateDropdown.addEventListener("change", function () {
+          var selectedState = stateDropdown.value;
+          updateCityDropdown(selectedState);
+      });
+      function updateStateDropdown(selectedCountry) {
+          var stateData = {
+              "India": [
+                  "Andhra Pradesh",
+                  "Arunachal Pradesh",
+                  "Assam",
+                  "Bihar",
+                  "Chhattisgarh",
+                  "Goa",
+                  "Gujarat",
+                  "Haryana",
+                  "Himachal Pradesh",
+                  "Jharkhand",
+                  "Karnataka",
+                  "Kerala",
+                  "Madhya Pradesh",
+                  "Maharashtra",
+                  "Manipur",
+                  "Meghalaya",
+                  "Mizoram",
+                  "Nagaland",
+                  "Odisha",
+                  "Punjab",
+                  "Rajasthan",
+                  "Sikkim",
+                  "Tamil Nadu",
+                  "Telangana",
+                  "Tripura",
+                  "Uttarakhand",
+                  "Uttar Pradesh",
+                  "West Bengal",
+                  "Andaman and Nicobar Islands",
+                  "Chandigarh",
+                  "Dadra and Nagar Haveli and Daman and Diu",
+                  "Lakshadweep",
+                  "Delhi",
+                  "Puducherry"
+              ],
+
+              "US": [
+                  "Alabama", "Alaska", "Arizona", "Arkansas", "California",
+                  "Colorado", "Connecticut", "Delaware", "Florida", "Georgia",
+                  "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
+                  "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland",
+                  "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri",
+                  "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
+                  "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
+                  "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina",
+                  "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
+                  "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
+              ],
+              "Singapore": ["Central Region", "East Region", "North Region", "North-East Region", "West Region"],
+              "Australia": ["New South Wales", "Queensland", "South Australia", "Tasmania", "Victoria", "Western Australia", "Australian Capital Territory (ACT)", "Northern Territory"]
+          };
+
+          stateDropdown.innerHTML = "<option value=''>Select State</option>";
+
+          if (selectedCountry in stateData) {
+              stateData[selectedCountry].forEach(function (state) {
+                  var option = document.createElement("option");
+                  option.value = state;
+                  option.textContent = state;
+                  stateDropdown.appendChild(option);
+              });
+          }
+      }
+      function updateCityDropdown(selectedState) {
+          var cityData = {
+              "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore"],
+              "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Pasighat", "Ziro", "Tawang"],
+              "Assam": ["Guwahati", "Jorhat", "Dibrugarh", "Silchar", "Nagaon"],
+              "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia"],
+              "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Raigarh"],
+              "Goa": ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda"],
+              "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Gandhinagar"],
+              "Haryana": ["Chandigarh", "Faridabad", "Gurgaon", "Hisar", "Panipat"],
+              "Himachal Pradesh": ["Shimla", "Manali", "Dharamshala", "Kullu", "Mandi"],
+              "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Hazaribagh"],
+              "Karnataka": ["Bangalore", "Mysore", "Hubli", "Mangalore", "Belgaum"],
+              "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kollam"],
+              "Madhya Pradesh": ["Bhopal", "Indore", "Jabalpur", "Gwalior", "Ujjain"],
+              "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik"],
+              "Manipur": ["Imphal", "Bishnupur", "Churachandpur", "Thoubal", "Ukhrul"],
+              "Meghalaya": ["Shillong", "Tura", "Jowai", "Baghmara", "Nongpoh"],
+              "Mizoram": ["Aizawl", "Lunglei", "Champhai", "Serchhip", "Kolasib"],
+              "Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Tuensang", "Wokha"],
+              "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Berhampur", "Sambalpur"],
+              "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda"],
+              "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota", "Ajmer"],
+              "Sikkim": ["Gangtok", "Namchi", "Mangan", "Gyalshing", "Singtam"],
+              "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem"],
+              "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Khammam"],
+              "Tripura": ["Agartala", "Udaipur", "Belonia", "Dharmanagar", "Kailasahar"],
+              "Uttarakhand": ["Dehradun", "Haridwar", "Rishikesh", "Nainital", "Mussoorie"],
+              "Uttar Pradesh": ["Lucknow", "Kanpur", "Agra", "Varanasi", "Allahabad"],
+              "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Asansol", "Siliguri"],
+              "Andaman and Nicobar Islands": ["Port Blair", "Havelock", "Diglipur", "Mayabunder", "Rangat"],
+              "Chandigarh": ["Chandigarh"],
+              "Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Diu", "Dadra", "Nagar Haveli"],
+              "Lakshadweep": ["Kavaratti", "Agatti", "Andrott", "Minicoy", "Kalpeni"],
+              "Delhi": ["New Delhi", "Delhi NCR", "Noida", "Gurgaon", "Faridabad"],
+              "Puducherry": ["Puducherry", "Karaikal", "Mahe", "Yanam"],
+              "Alabama": ["Birmingham", "Montgomery", "Huntsville", "Mobile", "Tuscaloosa"],
+              "Alaska": ["Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan"],
+              "Arizona": ["Phoenix", "Tucson", "Mesa", "Chandler", "Scottsdale"],
+              "Arkansas": ["Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro"],
+              "California": ["Los Angeles", "San Francisco", "San Diego", "San Jose", "Sacramento"],
+              "Colorado": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"],
+              "Connecticut": ["Bridgeport", "New Haven", "Hartford", "Stamford", "Waterbury"],
+              "Delaware": ["Wilmington", "Dover", "Newark", "Middletown", "Smyrna"],
+              "Florida": ["Miami", "Orlando", "Tampa", "Jacksonville", "Fort Lauderdale"],
+              "Georgia": ["Atlanta", "Augusta", "Columbus", "Savannah", "Athens"],
+              "Hawaii": ["Honolulu", "Hilo", "Kailua", "Kahului", "Kihei"],
+              "Idaho": ["Boise", "Meridian", "Nampa", "Idaho Falls", "Pocatello"],
+              "Illinois": ["Chicago", "Aurora", "Rockford", "Joliet", "Naperville"],
+              "Indiana": ["Indianapolis", "Fort Wayne", "Evansville", "South Bend", "Carmel"],
+              "Iowa": ["Des Moines", "Cedar Rapids", "Davenport", "Sioux City", "Iowa City"],
+              "Kansas": ["Wichita", "Overland Park", "Kansas City", "Topeka", "Olathe"],
+              "Kentucky": ["Louisville", "Lexington", "Bowling Green", "Owensboro", "Covington"],
+              "Louisiana": ["New Orleans", "Baton Rouge", "Shreveport", "Lafayette", "Lake Charles"],
+              "Maine": ["Portland", "Lewiston", "Bangor", "South Portland", "Auburn"],
+              "Maryland": ["Baltimore", "Frederick", "Rockville", "Gaithersburg", "Bowie"],
+              "Massachusetts": ["Boston", "Worcester", "Springfield", "Cambridge", "Lowell"],
+              "Michigan": ["Detroit", "Grand Rapids", "Warren", "Sterling Heights", "Lansing"],
+              "Minnesota": ["Minneapolis", "St. Paul", "Rochester", "Duluth", "Bloomington"],
+              "Mississippi": ["Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi"],
+              "Missouri": ["Kansas City", "St. Louis", "Springfield", "Columbia", "Independence"],
+              "Montana": ["Billings", "Missoula", "Great Falls", "Bozeman", "Butte"],
+              "Nebraska": ["Omaha", "Lincoln", "Bellevue", "Grand Island", "Kearney"],
+              "Nevada": ["Las Vegas", "Henderson", "Reno", "North Las Vegas", "Sparks"],
+              "New Hampshire": ["Manchester", "Nashua", "Concord", "Dover", "Rochester"],
+              "New Jersey": ["Newark", "Jersey City", "Paterson", "Elizabeth", "Edison"],
+              "New Mexico": ["Albuquerque", "Las Cruces", "Rio Rancho", "Santa Fe", "Roswell"],
+              "New York": ["New York City", "Buffalo", "Rochester", "Yonkers", "Syracuse"],
+              "North Carolina": ["Charlotte", "Raleigh", "Greensboro", "Durham", "Winston-Salem"],
+              "North Dakota": ["Fargo", "Bismarck", "Grand Forks", "Minot", "West Fargo"],
+              "Ohio": ["Columbus", "Cleveland", "Cincinnati", "Toledo", "Akron"],
+              "Oklahoma": ["Oklahoma City", "Tulsa", "Norman", "Broken Arrow", "Lawton"],
+              "Oregon": ["Portland", "Salem", "Eugene", "Gresham", "Hillsboro"],
+              "Pennsylvania": ["Philadelphia", "Pittsburgh", "Allentown", "Erie", "Reading"],
+              "Rhode Island": ["Providence", "Warwick", "Cranston", "Pawtucket", "East Providence"],
+              "South Carolina": ["Columbia", "Charleston", "North Charleston", "Mount Pleasant", "Rock Hill"],
+              "South Dakota": ["Sioux Falls", "Rapid City", "Aberdeen", "Brookings", "Watertown"],
+              "Tennessee": ["Nashville", "Memphis", "Knoxville", "Chattanooga", "Clarksville"],
+              "Texas": ["Houston", "San Antonio", "Dallas", "Austin", "Fort Worth"],
+              "Utah": ["Salt Lake City", "West Valley City", "Provo", "West Jordan", "Orem"],
+              "Vermont": ["Burlington", "Essex", "South Burlington", "Colchester", "Rutland"],
+              "Virginia": ["Virginia Beach", "Norfolk", "Chesapeake", "Richmond", "Newport News"],
+              "Washington": ["Seattle", "Spokane", "Tacoma", "Vancouver", "Bellevue"],
+              "West Virginia": ["Charleston", "Huntington", "Parkersburg", "Morgantown", "Wheeling"],
+              "Wisconsin": ["Milwaukee", "Madison", "Green Bay", "Kenosha", "Racine"],
+              "Wyoming": ["Cheyenne", "Casper", "Laramie", "Gillette", "Rock Springs"],
+              "Central Region": ["Central City 1", "Central City 2", "Central City 3"],
+              "East Region": ["East City 1", "East City 2", "East City 3"],
+              "North Region": ["North City 1", "North City 2", "North City 3"],
+              "North-East Region": ["North-East City 1", "North-East City 2", "North-East City 3"],
+              "West Region": ["West City 1", "West City 2", "West City 3"],
+              "New South Wales": ["Sydney", "Newcastle", "Wollongong", "Central Coast", "Blue Mountains"],
+              "Queensland": ["Brisbane", "Gold Coast", "Sunshine Coast", "Townsville", "Cairns"],
+              "South Australia": ["Adelaide", "Mount Gambier", "Whyalla", "Murray Bridge", "Port Lincoln"],
+              "Tasmania": ["Hobart", "Launceston", "Devonport", "Burnie", "Clarence"],
+              "Victoria": ["Melbourne", "Geelong", "Ballarat", "Bendigo", "Frankston"],
+              "Western Australia": ["Perth", "Fremantle", "Mandurah", "Bunbury", "Geraldton"],
+              "Australian Capital Territory (ACT)": ["Canberra"],
+              "Northern Territory": ["Darwin", "Alice Springs", "Palmerston", "Katherine", "Tennant Creek"]
+          };
+
+          cityDropdown.innerHTML = "<option value=''>Select Any City</option>";
+
+          if (selectedState in cityData) {
+              cityData[selectedState].forEach(function (city) {
+                  var option = document.createElement("option");
+                  option.value = city;
+                  option.textContent = city;
+                  cityDropdown.appendChild(option);
+              });
+          }
+      }
+      document.getElementById('logoutButton').addEventListener('click', function () {
+          logout();
+      });
+
+      function logout() {
+          sessionStorage.clear();
+          window.history.replaceState({}, 'login', '/login');
+          window.location.href = '/login';
+      }
+  </script>
+
+
+<script>
+    async function clientContact(event) {
+      event.preventDefault();
+      const form = document.querySelector('form'); // Get the form element
+
+        const selectCompany = form.elements['Select_Company'].value;
+        const country = form.elements['Select_Country'].value;
+        const state = form.elements['Select_State'].value;
+        const city = form.elements['Select_City'].value;
+        const firstName = form.elements['First_Name'].value;
+        const lastName = form.elements['Last_Name'].value;
+        const jobTitle = form.elements['Job_Title'].value;
+        const department = form.elements['Department'].value;
+        const email = form.elements['Email_Id'].value;
+        const mobile = form.elements['Mobile_No'].value;
+        const linkedIn = form.elements['Linkedin'].value;
+        const selectSource = form.elements['Select_Source'].value;
+
+        const data = {
+
+            selectCompany: selectCompany,
+            country:country,
+            state: state,
+            city: city,
+            firstName: firstName,
+            lastName: lastName,
+            jobTitle: jobTitle,
+            department: department,
+            email: email,
+            mobile: mobile,
+            linkedIn: linkedIn,
+            selectSource: selectSource,
+
+          };
+        console.log('Data:', data);
+
+        try {
+            const response = await fetch('http://localhost:4000/api/client/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            console.log('Response:', response);
+            console.log('Data:', data);
+            if (response.ok) {
+                  const result = await response.json();
+                  console.log('client contact created:', result);
+                  alert('Client contact created successfully!');
+              } else {
+                  console.error('Error client contact:', response.status, response.statusText);
+                }
+          } catch (error) {
+              console.error('Error client contact:', error);
+            }
+    }
+ 
+  </script>
+
+
+<script>
+    // Function to update dropdowns based on selected company
+    async function updateCompanyDropdown() {
+        try {
+            const response = await fetch('http://localhost:4000/selectcompany');
+            const data = await response.json();
+
+            if (response.ok) {
+                populateDropdown(companyDropdown, data); // Populate company dropdown with received data
+            } else {
+                console.error('Failed to fetch company data:', response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching company data:', error);
+        }
+    }
+</script>
+
+
+</body>
+ 
+</html>

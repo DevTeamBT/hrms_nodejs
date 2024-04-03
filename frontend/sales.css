@@ -1,0 +1,88 @@
+body {
+    display: flex;
+}
+
+.flex-column {
+    background-color: lightgrey;
+    padding: 30px;
+    width: 16%;
+    transition: 0.5s;
+}
+
+.image{
+    margin-bottom: 20px;
+    padding-left: 10px;
+    padding-bottom: 10%;
+    width:100%;
+}
+
+.container {
+    font-size: large;
+    margin-top: 4%;
+    margin-left: 5%;
+    margin-right: 5%;
+    width: 80%;
+}
+h4 {
+    text-align: center;
+    margin-bottom: 5px;
+}
+.table th{
+    padding-top: 15px;
+}
+h5{
+    margin-top: 14px;
+}
+.login img{
+    height: 25px;
+    width: 25px;
+    margin-right: 20px;
+}
+.login {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+}
+.table h4{
+    padding-left: 10%;
+}
+.nav-link{
+    font-size: large;
+    font-family: "Lato", sans-serif;
+    color: black;
+    padding-left: 25%;
+    padding-bottom: 20%;
+    position: relative;
+    display: block;
+    overflow: hidden;
+}
+#subitems {
+    display: none;
+    position: relative;
+    padding-left: 10%;
+    font-family: Times, serif;
+}
+
+.nav-link:hover #subitems {
+    display: block;
+}
+#subitems li a{
+    font-size: medium;
+    text-decoration: none;
+    color: black;
+}
+.openbtn {
+    text-decoration: none;
+    background-color: black;
+    margin-left: 110%;
+    font-size: 17px;
+    cursor: pointer;
+    color: white;
+    border-radius: 5px;
+  }
+  .openbtn:hover {
+    background-color: #444;
+  }
