@@ -1,7 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const router = express.Router();
-//const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const User = require('../schema/userSchema'); 
 const timeSheet = require('../schema/timeSheetSchema');
 const addClient = require('../schema/addClientSchema');
@@ -17,6 +17,7 @@ const randomstring = require('randomstring');
 const LocalStrategy = require('passport-local').Strategy;
 const { v4: uuidv4 } = require('uuid');
 const multer = require('multer');
+const { log } = require('console');
 
 
 let upload;
@@ -131,23 +132,6 @@ router.get('/api/users/:userId', async (req, res) => {
       return res.status(404).json({ error: 'User not found', details: 'No user found with the provided ID.' });
     }
 
-    // Respond with the retrieved user
-    res.status(200).json(user);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error', details: error.message });
-  }
-});
-router.get('/api/users', async (req, res) => {
-  try {
-    const officeEmail = req.query.officeEmail; // Extract officeEmail from query parameters
-
-    // Find the user by officeEmail in the database
-    const user = await User.findOne({ officeEmail });
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found', details: 'No user found with the provided office email.' });
-    }
     // Respond with the retrieved user
     res.status(200).json(user);
   } catch (error) {
@@ -285,7 +269,6 @@ router.post('/login', async (req, res) => {
           officeEmail: user.officeEmail,
           role: user.role, 
         };
-
         // Redirect based on the user's role
         if (req.session.user.role === 'admin') {
           res.status(200).json({ message: 'Login successful', user: req.session.user });
@@ -397,9 +380,6 @@ router.get('/login.css', (req, res) => {
       res.status(200).json({ message: "Password changed successfully" });
   });
    
-
-
-
 router.get('/password', (req, res) => {
   // Check if the user is authenticated
   if (!req.session.user) {
@@ -615,5 +595,381 @@ router.get('/addrequirement', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/addrequirement.html'));
 });
 
+
+//api for adding employee daily task
+router.post('/add/tasks', async (req, res) => {
+  try {
+    const { taskTitle, description, addTeam, createdAt } = req.body;
+    // Check if required fields are provided
+    if (!taskTitle || !addTeam) {
+      return res.status(400).json({ error: 'taskTitle and addTeam are required fields' });
+    }
+    const teamNames = addTeam.map(team => team.trim());
+        // Create new task object
+        const newTask = new addTask({
+          taskTitle,
+          description,
+          addTeam: teamNames,
+          createdAt
+
+        });
+    // Save the new task to MongoDB
+    await newTask.save();
+    // Return success response
+    res.status(201).json({ message: 'Task created successfully', task: newTask });
+  } catch (error) {
+    console.error('Error adding task:', error);
+    res.status(500).json({ error: 'Internal Server Error', details: error.message });
+  }
+});
+
+// GET route to fetch all tasks
+router.get('/add/tasks', async (req, res) => {
+  try {
+    // Fetch all tasks from the database
+    const tasks = await addTask.find();
+    // Return the tasks as JSON response
+    res.status(200).json(tasks);
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ error: 'Internal Server Error', details: error.message });
+  }
+});
+
+//getall api all tasks of all teams 
+router.get("/tasks",async (req,res)=>{
+  try {
+    const { taskTitle, addTeam } = req.query;
+    let query = {};
+    // Add criteria if provided
+    if (taskTitle) {
+      query.taskTitle = taskTitle;
+    }
+    if (addTeam) {
+      query.addTeam = { $in: Array.isArray(addTeam) ? addTeam : [addTeam] };
+    }
+    // Find tasks based on criteria
+    const tasks = await addTask.find(query);
+   
+   // Respond with HTML table
+   res.status(200).send(`
+   <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+          />
+          <link rel="stylesheet" href="./teamUpdate.css" /> 
+          <title>Document</title>
+          <style>
+            body {
+              display: flex;
+          }
+          .login {
+              display: flex;
+              align-items: center;
+              position: absolute;
+              top: 0;
+              right: 0;
+              margin: 10px;
+          }
+          .flex-column {
+              background-color:lightgrey;
+              padding: 30px;
+              width: 19%;
+              transition: 0.5s;
+          }
+          .image{
+              margin-bottom: 20px;
+              width: 100%;
+              padding-bottom: 10%;
+              padding-left: 10px;
+          }
+          .container {
+              width: 80%;
+              margin-top: 4%;
+              margin-left: 12%;
+              margin-right: 12%;
+              margin-bottom: 21%;
+          }
+          h4 {
+              text-align: center;
+              margin-bottom: 4%;
+          }
+          h5{
+              margin-top: 14px;
+          }
+          .login img{
+              height: 25px;
+              width: 25px;
+              margin-right: 20px;
+          }
+          .nav-link{
+              font-size: large;
+              font-family: "Lato", sans-serif;
+              color: black;
+              padding-left: 25%;
+              padding-bottom: 20%;
+              position: relative;
+              display: block;
+              overflow: hidden;
+          }
+          #subitems {
+              display: none;
+              position: relative;
+              padding-left: 10%;
+              font-family: Times, serif;
+          }
+        
+          .nav-link:hover #subitems {
+              display: block;
+          }
+          #subitems li a{
+              font-size: medium;
+              text-decoration: none;
+              color:black;
+          }
+          .openbtn {
+              text-decoration: none;
+              background-color: black;
+              margin-left: 110%;
+              font-size: 17px;
+              cursor: pointer;
+              color: white;
+              border-radius: 5px;
+            }
+            .openbtn:hover {
+              background-color: #444;
+            }
+          </style> 
+        </head>
+        <body>
+          <nav class="flex-column">
+            <div id="main">
+              <button class="openbtn" onclick="toggleNav()">☰</button>
+            </div>
+            <img
+              class="image"
+              src="https://bodhtree.com/wp-content/uploads/2016/02/logo-sticky.png"
+            />
+            <a class="nav-link" href="#">Home</a>
+            <span class="nav-link">
+              Admin
+              <span id="subitems">
+                <ul>
+                  <li><a href="{% url 'login' %}">Hr</a></li>
+                  <li><a href="{% url 'login' %}">Sales</a></li>
+                  <li><a href="{% url 'login' %}">Recruting</a></li>
+                </ul>
+              </span>
+            </span>
+            <a class="nav-link" href="#">Tickets</a>
+            <a class="nav-link" href="#">Forums</a>
+            <a class="nav-link" href="#">Contacts</a>
+            <div class="login">
+              <h5>Profile</h5>
+              <img src="{% static 'images/user.png' %}" alt="propic" />
+              <button type="button" id="logoutButton" class="btn btn-dark">Log Out</button>
+            </div>
+          </nav>
+          <div class="container">
+                <div class="mb-3 row">
+                  <div class="col-sm-4">
+            </form>
+          </div>
+            <table class="table">
+              <h4>Recent Updates:</h4>
+              <thead>
+              <tr>
+              <th>#</th>
+              <th>Task Title</th>
+              <th>Description</th>
+              <th>Team</th>
+              <th>Timestamp</th>
+            </thead>
+            <tbody>
+              ${tasks.map((tasks, index) => `
+                <tr>
+                  <td>${index + 1}</td>
+           <td><a href="/taskTitlePage" target="_blank">${tasks.taskTitle}</a></td>
+          <td>${tasks.description}</td>
+          <td>${tasks.addTeam.join(', ')}</td>
+          <th>${tasks.createdAt}</th>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </body>
+        </html>
+      `);
+          
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+//api to add taskTitle and description and comments
+router.post('/tasks/:_id', async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const { comments } = req.body;
+    let task = await addTask.findOne({ _id });
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+    if (!Array.isArray(task.comments)) {
+      task.comments = [];
+    }
+    const newComments = Array.isArray(comments) ? comments : [comments];
+    for (const newComment of newComments) {
+      if (!newComment.text) {
+        return res.status(400).json({ error: 'Text field is required for each comment' });
+      }
+    }
+    newComments.forEach(newComment => {
+      task.comments.push({ text: newComment.text, createdAt: new Date() });
+    });
+    task = await task.save();
+    res.status(200).json(task);
+  } catch (error) {
+    console.error('Error adding comment:', error);
+    res.status(500).json({ error: 'Failed to add comment to the task' });
+  }
+});
+
+
+
+
+// router.get('/task-details', async (req, res) => {
+//   try {
+//     const tasks = await addTask.find();
+//     res.json(tasks);
+//   } catch (error) {
+//     console.error('Error fetching tasks:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
+
+router.get('/task-details/:taskId', async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const task = await addTask.findById(taskId).populate('comments'); // Populate the 'comments' field
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+    res.json(task);
+  } catch (error) {
+    console.error('Error fetching task details:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+//html page of teamUpdate
+router.get('/teamUpdate', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/teamUpdate.html'));
+});
+router.get('/taskTitlePage', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/taskTitlePage.html'));
+});
+router.get('/add/task', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/timesheet.html'));
+});
+
+// Get a specific task by its task title
+router.get('/tasks/title/:taskTitle', async (req, res) => {
+  try {
+    const taskTitle = req.params.taskTitle;
+    const task = await addTask.findOne({ taskTitle: taskTitle });
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+    res.status(200).json(task);
+  } catch (error) {
+    console.error('Error fetching task by title:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Get all task title from db
+router.get('/tasks/titles', async (req, res) => {
+  try {
+    const tasks = await addTask.find({}, { _id: 0, taskTitle: 1 });
+    if (tasks.length === 0) {
+      return res.status(404).json({ error: 'No tasks found' });
+    }
+    res.status(200).json({ taskTitles: tasks.map(task => task.taskTitle) });
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/tasks/titles/:_id', async (req, res) => {
+  const _id = req.params._id;
+  try {
+    const task = await addTask.findOne({ _id }, { _id: 0, taskTitle: 1 });
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+    res.status(200).json({ taskTitle: task.taskTitle });
+  } catch (error) {
+    console.error('Error fetching task:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+// Update an existing task with given data
+router.put('/tasks/:taskTitle', async (req, res) => {
+  try {
+    // Find and update the task in question
+    let updatedTask = await addTask.findOneAndUpdate({ taskTitle: req.params.taskTitle }, req.body, { new: true });
+    // If no task was found, send an error
+    if (!updatedTask) {
+      return res.status(404).json({ error: "No task with that taskTitle exists." })
+    }
+    // Otherwise, send back the updated task
+    res.status(200).json(updatedTask);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err.message || "A problem occurred updating the task" });
+  }
+});
+
+
+
+
+//extrating data country,state,city
+router.post('/extract-data', async (req, res) => {
+  try {
+    const { country, state, city } = req.body;
+    // Source collection
+    const sourceCollection = mongoose.connection.db.collection('addClient');
+    // Destination collection
+    const destinationCollection = mongoose.connection.db.collection('addClientContact');
+    // Find documents matching the criteria
+    const query = { country, state, city };
+    const documents = await sourceCollection.find(query).toArray();
+
+    // Check if documents array is empty
+    if (documents.length === 0) {
+      return res.status(400).json({ error: 'No documents found for the specified criteria' });
+    }
+
+    // Insert documents into the destination collection
+    const result = await destinationCollection.insertMany(documents);
+    res.status(200).json({ message: 'Data extracted successfully', insertedCount: result.insertedCount });
+  } catch (error) {
+    console.error('Error extracting data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 module.exports = router;
