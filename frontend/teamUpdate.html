@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+ 
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+     <link rel="stylesheet" href="./teamUpdate.css" /> 
+    <title>Document</title>
+    <!-- <style>
+      body {
+        display: flex;
+    }
+   
+    .login {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 10px;
+    }
+    .flex-column {
+        background-color:lightgrey;
+        padding: 30px;
+        width: 19%;
+        transition: 0.5s;
+    }
+    .image{
+        margin-bottom: 20px;
+        width: 100%;
+        padding-bottom: 10%;
+        padding-left: 10px;
+    }
+    .container {
+        width: 80%;
+        margin-top: 4%;
+        margin-left: 12%;
+        margin-right: 12%;
+        margin-bottom: 21%;
+    }
+    h4 {
+        text-align: center;
+        margin-bottom: 4%;
+    }
+    h5{
+        margin-top: 14px;
+    }
+    .login img{
+        height: 25px;
+        width: 25px;
+        margin-right: 20px;
+    }
+    .nav-link{
+        font-size: large;
+        font-family: "Lato", sans-serif;
+        color: black;
+        padding-left: 25%;
+        padding-bottom: 20%;
+        position: relative;
+        display: block;
+        overflow: hidden;
+    }
+    #subitems {
+        display: none;
+        position: relative;
+        padding-left: 10%;
+        font-family: Times, serif;
+    }
+   
+    .nav-link:hover #subitems {
+        display: block;
+    }
+    #subitems li a{
+        font-size: medium;
+        text-decoration: none;
+        color:black;
+    }
+    .openbtn {
+        text-decoration: none;
+        background-color: black;
+        margin-left: 110%;
+        font-size: 17px;
+        cursor: pointer;
+        color: white;
+        border-radius: 5px;
+      }
+      .openbtn:hover {
+        background-color: #444;
+      }
+    </style> -->
+   
+  </head>
+  <body>
+    <nav class="flex-column">
+      <div id="main">
+        <button class="openbtn" onclick="toggleNav()">☰</button>
+      </div>
+      <img
+        class="image"
+        src="https://bodhtree.com/wp-content/uploads/2016/02/logo-sticky.png"
+      />
+      <a class="nav-link" href="#">Home</a>
+      <span class="nav-link">
+        Admin
+        <span id="subitems">
+          <ul>
+            <li><a href="{% url 'login' %}">Hr</a></li>
+            <li><a href="{% url 'login' %}">Sales</a></li>
+            <li><a href="{% url 'login' %}">Recruting</a></li>
+          </ul>
+        </span>
+      </span>
+      <a class="nav-link" href="#">Tickets</a>
+      <a class="nav-link" href="#">Forums</a>
+      <a class="nav-link" href="#">Contacts</a>
+      <div class="login">
+        <h5>Profile</h5>
+        <img src="{% static 'images/user.png' %}" alt="propic" />
+        <button type="button" id="logoutButton" class="btn btn-dark">Log Out</button>
+      </div>
+    </nav>
+    <div class="container">
+      <!-- <h4>Recent Activity</h4> -->
+        <!-- <div class="mb-3 row">
+            <label for="team" class="col-sm-4 col-form-label">Select Team:</label>
+            <div class="col-sm-4">
+                <select class="form-select" id="team">
+                    <option value="Select">Select any Team</option>
+                    <option value="dev">Dev-Team</option>
+                    <option value="finance">Finance-Team</option>
+                    <option value="network">Networking-Team</option>
+                </select>
+            </div>
+        </div>  -->
+        <!-- <form method="get" > -->
+
+          <div class="mb-3 row">
+            <!-- <label for="team" class="col-sm-4 col-form-label" name="select team">Select Team:</label> -->
+            <div class="col-sm-4">
+          <!-- <select class="form-select" id="team" name="team">
+            <option value="Select">Select any Team</option>
+            <option value="dev">Dev-Team</option>
+            <option value="finance">Finance-Team</option>
+            <option value="network">Networking-Team</option>
+          </select> -->
+          <!-- <button class= "btn btn-primary mt-3 mb-3" type="submit">Submit</button> -->
+      </form>
+    </div>
+       <!-- <div>
+            <div class="mb-3 row">
+                <label for="members" class="col-sm-4 col-form-label">Select Member:</label>
+                <div class="col-sm-4">
+                    <select class="mb-3 form-select" id="members">
+                        <option value="Select">Select any Member</option>
+                        <option value="chandu">Chandu</option>
+                        <option value="jay">Jay</option>
+                        <option value="manikanta">Manikanta</option>
+                        <option value="akhil">Akhil</option>
+                    </select>
+                </div>
+            </div>   -->
+      <table class="table">
+        <h4>Recent Updates:</h4>
+        <thead>
+          <tr>
+           
+            <th>s.no</th>
+            <th>Task Title</th>
+            <th>Description</th>
+            <th>Team</th>
+            <th>Timestamp</th>
+            <!-- <th>comment</th>
+            <th>Timestamp</th> -->
+           
+          </tr>
+        </thead>
+        <tbody id="taskTable">
+            
+          </tbody>
+        <!-- <tbody>
+          <tr>
+            <th scope="row"></th>
+            <td>{{item.username}}</td> -->
+            <!-- <td>{{item.name}}</td>
+            <td>{{item.task}}</td>
+            <td>{{item.team}}</td>
+            <td>{{item.description}}</td> -->
+            <!-- <td>{{item.comment}}</td>
+            <td>{{item.timestamp}}</td> -->
+          <!-- </tr>
+        </tbody> - -->
+      </table>
+    </div>
+
+    <script>
+      var sidebarOpen = true;
+      function toggleNav() {
+        var sidebar = document.querySelector(".flex-column");
+        if (sidebarOpen) {
+          sidebar.style.width = "0";
+          sidebar.style.padding = "0";
+        } else {
+          sidebar.style.width = "19%";
+          sidebar.style.padding = "30px";
+        }
+        sidebarOpen = !sidebarOpen;
+      }
+      document.getElementById('logoutButton').addEventListener('click', function () {
+            logout();
+        });
+ 
+        function logout() {
+            sessionStorage.clear();
+            window.history.replaceState({}, 'login', '/login');
+            window.location.href = './login';
+        }
+    </script>
+
+
+<script>
+ document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      const response = await fetch('http://localhost:4000/tasks');
+      if (response.ok) {
+        const tasks = await response.json();
+        displayTasks(tasks);
+      } else {
+        console.error('Error fetching tasks:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  });
+
+  function displayTasks(tasks) {
+    const tableBody = document.getElementById('taskTable');
+    tasks.forEach((task, index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td><a href="#" class="task-link" data-task-id="${task._id}">${task.taskTitle}</a></td>
+        <td>${task.description}</td>
+        <td>${task.addTeam.join(', ')}</td>
+        <td>${task.createdAt}</td>
+      `;
+      tableBody.appendChild(row);
+    });
+  }
+
+  function handleClick(event) {
+    event.preventDefault(); // Prevent default link behavior
+    
+    const taskId = event.target.dataset.taskId;
+  
+    // Open the task title page with its _id
+    window.open(`/taskTitlePage/:_id`, '_blank');
+  }
+  
+  // Attach event listeners to elements with the 'task-link' class
+  document.querySelectorAll('.task-link').forEach(link => {
+    link.addEventListener('click', handleClick);
+  });
+          
+</script>
+
+
+
+
+  </body>
+</html>

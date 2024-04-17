@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+ 
+    <title>Task</title>
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"
+    /> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <style>
+      body{
+        display: flex;
+    }
+    .flex-column {
+        background-color: lightgrey;
+        padding: 30px;
+        width: 15%;
+        transition: 0.5s;
+    }
+   
+    .image{
+        margin-bottom: 20px;
+        padding-left: 10px;
+        padding-bottom: 10%;
+        width:100%;
+    }
+    .form{
+        margin-top: 4%;
+        margin-left: 30%;
+    }
+    .container{
+        width: 80%;
+        margin-bottom: 16%;
+       font-size: large;
+    }
+    .timesheet{
+        margin-top: 60px;
+        text-align: center;
+    }
+    .buttons{
+        padding-left: 12%;
+    }
+    .login {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 10px;
+    }
+    .login img{
+        height: 25px;
+        width: 25px;
+        margin-right: 20px;
+    }
+    h5{
+        margin-top: 12px;
+    }
+    .nav-link{
+        font-size: large;
+        font-family: "Lato", sans-serif;
+        color: black;
+        padding-left: 25%;
+        padding-bottom: 20%;
+        position: relative;
+        display: block;
+        overflow: hidden;
+    }
+    #subitems {
+        display: none;
+        position: relative;
+        padding-left: 10%;
+        font-family: Times, serif;
+    }
+   
+    .nav-link:hover #subitems {
+        display: block;
+    }
+    #subitems li a{
+        font-size: medium;
+        text-decoration: none;
+        color: black;
+    }
+    .openbtn {
+        text-decoration: none;
+        background-color: black;
+        margin-left: 110%;
+        font-size: 17px;
+        cursor: pointer;
+        color: white;
+        border-radius: 5px;
+      }
+      .openbtn:hover {
+        background-color: #444;
+      }
+    </style>
+  </head>
+ 
+  <body>
+    <nav class="flex-column">
+      <div id="main">
+        <button class="openbtn" onclick="toggleNav()">☰</button>
+      </div>
+      <img
+        class="image"
+        src="https://bodhtree.com/wp-content/uploads/2016/02/logo-sticky.png"
+      />
+      <a class="nav-link" href="#">Home</a>
+      <span class="nav-link">
+        Admin
+        <span id="subitems">
+          <ul>
+            <li><a href="{% url 'login' %}">Hr</a></li>
+            <li><a href="{% url 'login' %}">Sales</a></li>
+            <li><a href="{% url 'login' %}">Recruting</a></li>
+          </ul>
+        </span>
+      </span>
+      <a class="nav-link" href="#">Tickets</a>
+      <a class="nav-link" href="#">Forums</a>
+      <a class="nav-link" href="#">Contacts</a>
+      <div class="login">
+        <h5>Profile</h5>
+        <img src="" alt="propic" />
+        <button type="button" id="logoutButton" class="btn btn-dark">Log Out</button>
+      </div>
+    </nav>
+ 
+    <div class="container">
+      <h4 class="mb-3 timesheet">${tasks.taskTitle}</h4>
+      <div id="taskTitlesContainer"></div>
+      <!-- <div id="taskDetailsContainer"></div> -->
+      <div class="form">
+        <form action="/tasks/:taskTitle" method="post">
+          <div class="mb-3 row">
+            <label for="description" class="col-sm-4 col-form-label"
+              >Description:</label
+            >
+            <div class="col-sm-4">
+              <textarea
+                class="form-control"
+                placeholder="DESCRIPTION"
+                name="description"
+                required
+              ></textarea>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="comment" class="col-sm-4 col-form-label"
+              >Comment:</label
+            >
+            <div class="mb-3 col-sm-4">
+              <textarea
+                class="form-control"
+                placeholder="comment here"
+                name="comment"
+              ></textarea>
+            </div>
+          </div>
+          <div>
+            <div class="buttons">
+              <button type="submit" class="btn btn-primary col-sm-2">
+                Save
+              </button>
+              <button type="button" class="btn btn-secondary col-sm-2">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      var sidebarOpen = true;
+      function toggleNav() {
+        var sidebar = document.querySelector(".flex-column");
+        if (sidebarOpen) {
+          sidebar.style.width = "0";
+          sidebar.style.padding = "0";
+        } else {
+          sidebar.style.width = "15%";
+          sidebar.style.padding = "30px";
+        }
+        sidebarOpen = !sidebarOpen;
+      }
+      //   function logout() {
+      //     var lg=document.querySelector(".btn");
+      //     if(lg.)
+      //   }
+      document.getElementById('logoutButton').addEventListener('click', function () {
+            logout();
+        });
+ 
+        function logout() {
+            sessionStorage.clear();
+            window.history.replaceState({}, 'Login', 'http://127.0.0.1:8000/bodhtree/login/');
+            window.location.href = 'http://127.0.0.1:8000/bodhtree/login/';
+        }
+    </script>
+ 
+<div id="taskDetails"></div>
+    
+    <!-- <script>
+        // Function to fetch task details by taskId
+        async function fetchTaskDetails(taskId) {
+            try {
+                const response = await fetch('http://localhost:4000/task-details/tasks_id');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch task details');
+                }
+                const task = await response.json();
+                displayTaskDetails(task);
+            } catch (error) {
+                console.error('Error fetching task details:', error);
+                // Display error message to the user
+                document.getElementById('taskDetails').innerHTML = `<p>Error fetching task details: ${error.message}</p>`;
+            }
+        }
+
+        // Function to display task details on the HTML page
+        function displayTaskDetails(task) {
+            const taskDetailsDiv = document.getElementById('taskDetails');
+            taskDetailsDiv.innerHTML = `
+                <h2>${task.taskTitle}</h2>
+                <p>Description: ${task.description}</p>
+                <p>Team: ${task.comments.join(', ')}</p>
+                <p>Created At: ${new Date(task.createdAt).toLocaleString()}</p>
+            `;
+        }
+
+        // Get taskId from the URL query string
+        const urlParams = new URLSearchParams(window.location.search);
+        const taskId = urlParams.get('taskId');
+
+        // Fetch task details for the taskId
+        if (taskId) {
+            fetchTaskDetails(taskId);
+        } else {
+            document.getElementById('taskDetails').innerHTML = '<p>No taskId provided</p>';
+        }
+    </script> -->
+    <!-- <script>async function fetchTaskByTitle(taskTitle) {
+      try {
+          const response = await fetch('http://localhost:4000/tasks/:taskTitle', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ taskTitle })
+          });
+          if (!response.ok) {
+              throw new Error('Failed to fetch task details');
+          }
+          const task = await response.json();
+          displayTaskDetails(task);
+      } catch (error) {
+          console.error('Error fetching task details:', error);
+          // Display error message to the user
+          document.getElementById('taskDetails').innerHTML = `<p>Error fetching task details: ${error.message}</p>`;
+      }
+  }
+  
+  document.getElementById('fetchTaskForm').addEventListener('submit', function (event) {
+      event.preventDefault(); // Prevent default form submission
+      const taskTitle = document.getElementById('taskTitle').value;
+      fetchTaskByTitle(taskTitle); // Fetch task details
+  });
+  
+  // Fetch task details for the provided taskTitle from URL query parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const taskTitle = urlParams.get('/tasks/title/:taskTitle');
+  if (taskTitle) {
+      fetchTaskByTitle(taskTitle); // Fetch task details for the provided taskTitle
+  } else {
+      // Display error message if no taskTitle is provided
+      document.getElementById('taskDetails').innerHTML = '<p>No taskTitle provided</p>';
+  }
+  </script> -->
+
+<script>
+        // Function to fetch task titles by ID
+        async function fetchTaskTitlesById(taskId) {
+            try {
+                const endpoint = `http://localhost:4000/tasks/titles/:_id`;
+                const response = await fetch(endpoint);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch task titles for id ${taskId}`);
+                }
+
+                const responseData = await response.json();
+
+                // Display task titles
+                displayTaskTitles(responseData);
+            } catch (error) {
+                console.error('Error fetching task titles:', error);
+                // Display an error message on the UI
+                displayErrorMessage(error.message);
+            }
+        }
+
+        // Function to handle click events
+        function handleClick(event) {
+            const taskId = event.target.dataset.taskId;
+
+            // Call fetchTaskTitlesById with the task ID
+            fetchTaskTitlesById(taskId);
+        }
+
+        // Attach event listeners to elements with the 'task-link' class
+        document.querySelectorAll('.task-link').forEach(link => {
+            link.addEventListener('click', handleClick);
+        });
+
+        // Function to display task titles
+        function displayTaskTitles(taskTitles) {
+            const taskTitlesContainer = document.getElementById('taskTitlesContainer');
+            taskTitlesContainer.innerHTML = ''; // Clear previous content
+
+            if (Array.isArray(taskTitles) && taskTitles.length > 0) {
+                taskTitles.forEach(taskTitle => {
+                    const titleElement = document.createElement('h4');
+                    titleElement.textContent = taskTitle.taskTitle;
+                    titleElement.classList.add('mb-3', 'timesheet');
+                    taskTitlesContainer.appendChild(titleElement);
+                });
+            } else {
+                // If no task titles found, display a message
+                const messageElement = document.createElement('p');
+                messageElement.textContent = 'No task titles found';
+                taskTitlesContainer.appendChild(messageElement);
+            }
+        }
+
+        // Function to display error messages
+        function displayErrorMessage(message) {
+            const taskTitlesContainer = document.getElementById('taskTitlesContainer');
+            taskTitlesContainer.innerHTML = ''; // Clear previous content
+
+            const errorElement = document.createElement('p');
+            errorElement.textContent = message;
+            errorElement.style.color = 'red';
+
+            taskTitlesContainer.appendChild(errorElement);
+        }
+    </script>
+
+
+
+  
+  </body>
+</html>

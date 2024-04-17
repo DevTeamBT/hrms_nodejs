@@ -14,13 +14,13 @@ const userSchema = new mongoose.Schema({
   otp: {type: String, required: true },
   createdAt: {type: Date, default: Date.now, expires: '5m'},// Automatically delete documents after 5 minutes
   workLocation: {type:"string"},
-  mobileNo: {type: Number, required: true},
+  mobileNo: {type: Number,required: true},
   personal_Email: {type:"string"},
   gender: {type:"string"},
   native: {type:"string"},
-  enterCode: {type:"string", required: true},
+  enterCode: {type:"string",required: true},
   enterPassword: {type:"string", required: true, unique: true},
-  role: {type: "string", required: true},
+  role: {type: "string",required: true},
   photo: {type: "string"}
 });
 

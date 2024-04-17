@@ -6,7 +6,7 @@ const contactSchema = new mongoose.Schema({
     selectState: {type:"string"},
     selectCity: {type:"string"},
     firstName: {type:"string", required: true},
-    lastName: {type:"string", required: true},
+    lastName: {type:"string"},
     jobTitle: {type:"string"},
     department: {type:"string"},
     email: {type:"string", required: true},

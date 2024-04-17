@@ -23,6 +23,10 @@ mongoose.connect('mongodb+srv://madabhavipriyanka62:venwkNcLMK3gjCOr@cluster0.0n
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
+//Storing Timestamps only time in Databases using Mongoose  
+const now = new Date();
+//const expiresIn = now.setDate(now.getDate() + 1); 
+
 
 const db = mongoose.connection;
 
