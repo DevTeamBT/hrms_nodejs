@@ -60,40 +60,32 @@ router.use(
 
 // POST api to create user 
 router.post('/api/users', async (req, res) => {
-  
   try {
         // Check if a user with the same enterCode or officeEmail already exists
         const existingUser = await User.findOne({
           $or: [{ enterCode: req.body.enterCode }, { officeEmail: req.body.officeEmail }],
         });
-
         if (existingUser) {
           // User with the same enterCode or officeEmail already exists
           return res.status(400).json({ error: 'User already exists', details: 'Enter code or office email is already in use.' });
         }
-
         // Validate office email format
       if (req.body.officeEmail && !req.body.officeEmail.endsWith('@bodhtree.com')) {
         return res.status(400).json({ error: 'Invalid office email', details: 'Office email must end with @bodhtree.com.' });
       }
-
       //uploding  image file and saving its name in database
       let profileImageName = ''; // Initialize profileImageName variable
-
       // Check if files are uploaded
       if (req.files && req.files.profile_image) {
           const uploadPath = path.join(__dirname, '../images'); // Construct upload path
           console.log("Uploading Image");
-      
           // Check if upload directory exists; if not, create it
           if (!fs.existsSync(uploadPath)) {
               fs.mkdirSync(uploadPath);
           }
-      
           const file = req.files.profile_image; // Get uploaded file
           const filename = uuidv4() + path.extname(file.name); // Generate unique filename
           profileImageName = filename; // Store filename in profileImageName variable
-      
           // Move uploaded file to upload path
           file.mv(`${uploadPath}/${filename}`, function(err) {
               if (err) {
@@ -105,13 +97,10 @@ router.post('/api/users', async (req, res) => {
               }
           });
       }
-
     // Create a new user instance with data from the request
     const newUser = new User(req.body);
-
     // Save the user to the database
     const savedUser = await newUser.save();
-
     // Respond with the created user
     res.status(200).json(savedUser);
   } catch (error) {
@@ -255,10 +244,8 @@ router.get('/users', (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { officeEmail, enterPassword } = req.body;
-
     // Find the user in the database by office mail
     const user = await User.findOne({ officeEmail });
-
     // Check if the user exists
     if (user) {
       if (enterPassword === user.enterPassword) {
@@ -333,11 +320,9 @@ router.get('/login.css', (req, res) => {
 
     router.post('/generate-otp', async (req, res) => {
       const { officeEmail } = req.body;
-    
       try {
         // Generate a random OTP
         const otp = generateOTP();
-    
         // Set up the mail options for sending the OTP
         const mailOptions = {
           from: "shrestimadabhavi1998@gmail.com", // Replace this with your actual email address
@@ -345,7 +330,6 @@ router.get('/login.css', (req, res) => {
           subject: 'OTP Verification',
           text: `Your OTP is: ${otp}`
         };
-    
         // Send the email with the generated OTP
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
