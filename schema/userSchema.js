@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   annual_ctc: {type: "string"},
   officeEmail: {type:"string" ,required: true,
   unique: true},
-  otp: {type: String, required: true },
+  otp: {type: String },
   createdAt: {type: Date, default: Date.now, expires: '5m'},// Automatically delete documents after 5 minutes
   workLocation: {type:"string"},
   mobileNo: {type: Number,required: true},
