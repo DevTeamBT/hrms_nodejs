@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+  <link rel="stylesheet" href="./Addtask.css" />
+  <title>New Task</title>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="login" style="display: flex; justify-content: space-between; align-items: center; position: absolute; top: 10px; right: 10px;">
+    <h5 id="fullNameDisplay">fullName</h5>
+    <button type="button" id="logoutButton" class="btn btn-dark">Log Out</button>
+</div>
+  <nav class="flex-column">
+    <!-- <div id="main"> -->
+      <!-- <button class="openbtn" type="button" onclick="toggleNav()">☰</button> -->
+    <!-- </div> -->
+    <ul>
+      <img class="image" src="https://bodhtree.com/wp-content/uploads/2016/02/logo-sticky.png" />
+      <li><a href="./index.html" class="nav-link"><i class="fs-2 bi bi-house-door"></i><span>Home</span></a></li>
+      <li><a href="./mydetails.html" class="nav-link"><i class="fs-2 bi bi-file-earmark-person"></i><span>My Details</span></a></li>
+      <li><a href="./timesheet.html" class="nav-link"><i class="fs-2 bi bi-clock-history"></i><span>Timesheet</span></a></li>
+      <li><a href="./resources.html" class="nav-link"><i class="fs-2 bi bi-gear-wide-connected"></i><span>Resources</span></a></li>
+      <li><a href="#" class="nav-link"><i class="fs-2 bi bi-chat-left-text"></i><span>Forums</span></a></li>
+      <li><a href="./organization.html" class="nav-link"><i class="fs-2 bi bi-diagram-3"></i><span>Organization</span></a></li>
+    </ul>
+    <!-- <a class="nav-link" href="#">Home</a> -->
+    <!-- <span class="nav-link">
+        Admin
+        <span id="subitems">
+          <ul>
+            <li><a href="{% url 'login' %}">Hr</a></li>
+            <li><a href="{% url 'login' %}">Sales</a></li>
+            <li><a href="{% url 'login' %}">Recruting</a></li>
+          </ul>
+        </span>
+      </span>
+      <a class="nav-link" href="#">Tickets</a>
+      <a class="nav-link" href="#">Forums</a>
+      <a class="nav-link" href="#">Contacts</a> -->
+  </nav>
+
+
+  <div class="main">
+            <div class="topbar">
+                <div class="toggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </div>
+ 
+                <!-- <div class="search">
+                    <label>
+                        <input type="text" placeholder="Search here">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </label>
+                </div> -->
+ 
+                <div class="user">
+                    <img src="assets/imgs/customer01.jpg" alt="">
+                </div>
+            </div>
+ 
+            <!-- ======================= Cards ================== -->
+             <!-- <div class="cardBox">
+                <a href="./Addtask.html" class="card">
+                    <div>
+                        <div class="numbers">Add Task</div>
+                        
+                    </div>
+ 
+                    <div class="iconBx">
+                        <ion-icon name="eye-outline"></ion-icon>
+                    </div>
+                </a>
+              </div>
+
+              </div> -->
+ 
+  <!-- <div class="login">
+    <div id="full-name" class="top-right"></div>
+    <h5>fullName</h5>
+    <!- <img src="{% static 'images/user.png' %}" alt="propic" /> -->
+    <!-- <button type="button" id="logoutButton" class="btn btn-dark">Log Out</button>
+  </div>  -->
+  <div class="container mx-5 px-5">
+    <h4 class="mb-3 timesheet">Add Task</h4>
+    <div>
+      <div role="alert">
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+      </div>
+
+    </div>
+    <div class="form">
+      <form action="/add/tasks" method="post" onsubmit="createTask(event)">
+       
+        <div class="mb-3 row">
+          <label for="tasktitle" class="col-sm-4 col-form-label"
+            >Task Title:</label
+          >
+          <div class="col-sm-4">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="TASK TITLE"
+              name="task"
+              required
+            />
+          </div>
+        </div>
+        <!-- <div class="mb-3 row">
+          <label for="addteam" class="col-sm-4 col-form-label">Add Team:</label>
+          <div class="col-sm-4">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="TEAM NAME"
+              name="team"
+              required
+            />
+          </div>
+        </div> -->
+        <div class="mb-3 row">
+          <label for="addteam" class="col-sm-4 col-form-label">Add Team:</label>
+          <div class="col-sm-4">
+          <select class="form-control" id="addTeam" name="addTeam[]" multiple required>Select Team
+          </select>
+          </div>
+          </div>
+
+        <div class="mb-3 row">
+          <label for="description" class="col-sm-4 col-form-label"
+            >Description:</label
+          >
+          <div class="col-sm-4">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="DESCRIPTION"
+              name="description"
+              required
+            />
+          </div>
+        
+       <!-- <div class="mb-3 row">
+          <label for="name" class="col-sm-4 col-form-label">Name:</label>
+          <div class="col-sm-5">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="first name"
+              name="first_name"
+              required
+            />
+          </div>
+        </div>  -->
+      
+        <div>
+          <div class="buttons">
+            <button type="submit" class="btn btn-primary col-sm-2 mt-5">
+              Submit
+            </button>
+            <button type="button" class="btn btn-secondary col-sm-2 mt-5">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    var sidebarOpen = true;
+    function toggleNav() {
+      var sidebar = document.querySelector(".flex-column");
+      if (sidebarOpen) {
+        sidebar.style.width = "0";
+        sidebar.style.padding = "0";
+        
+      } else {
+        sidebar.style.width = "15%";
+        sidebar.style.padding = "30px";
+        
+      }
+      sidebarOpen = !sidebarOpen;
+    }
+    //   function logout() {
+    //     var lg=document.querySelector(".btn");
+    //     if(lg.)
+    //   }
+    document.getElementById('logoutButton').addEventListener('click', function () {
+      logout();
+    });
+
+    function logout() {
+      sessionStorage.clear();
+      window.history.replaceState({}, 'login', './login');
+      window.location.href = './login';
+    }
+  </script>
+
+  <script>
+    async function createTask(event) {
+      event.preventDefault();
+      const form = document.querySelector('form'); // Get the form element
+
+      const taskTitle = form.elements['task'].value;
+      const description = form.elements['description'].value;
+      const selectedTeams = form.elements['addTeam[]'].selectedOptions;
+
+      // Extract the values of the selected options
+      const addTeam = Array.from(selectedTeams).map(option => option.value);
+
+      const data = {
+        taskTitle: taskTitle,
+        description: description,
+        addTeam: addTeam,
+      };
+      console.log('Data:', data);
+
+      try {
+        const response = await fetch('http://localhost:4000/add/tasks', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+        console.log('Response:', response);
+        console.log('Data:', data);
+        if (response.ok) {
+          const result = await response.json();
+          console.log('Task created:', result);
+          alert('Task created successfully!');
+          // Redirect to another page after successful task creation
+          window.location.href = 'http://localhost:4000/tasks'; // Change '/another-page.html' to the desired page URL
+        } else {
+          console.error('Error creating task:', response.status, response.statusText);
+        }
+      } catch (error) {
+        console.error('Error creating task:', error);
+      }
+    }
+
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Retrieve full name from the session and display it
+      const fullName = localStorage.getItem('fullName');
+      if (fullName) {
+        document.getElementById('full-name').innerText = fullName;
+      }
+    });
+  </script>
+
+
+
+
+<div class="main">
+  <div class="topbar">
+      <div class="toggle">
+          <ion-icon name="menu-outline"></ion-icon>
+      </div>
+
+      <!-- <div class="search">
+          <label>
+              <input type="text" placeholder="Search here">
+              <ion-icon name="search-outline"></ion-icon>
+          </label>
+      </div> -->
+
+      <div class="user">
+          <img src="assets/imgs/customer01.jpg" alt="">
+      </div>
+  </div>
+
+  <!-- ======================= Cards ================== -->
+   <!-- <div class="cardBox">
+      <a href="./Addtask.html" class="card">
+          <div>
+              <div class="numbers">Add Task</div>
+              
+          </div>
+
+          <div class="iconBx">
+              <ion-icon name="eye-outline"></ion-icon>
+          </div>
+      </a> -->
+
+      <!-- <a href="./viewupdate.html" class="card">
+          <div>
+              <div class="numbers">View Updates</div>
+               
+          </div>
+
+          <div class="iconBx">
+              <ion-icon name="cart-outline"></ion-icon>
+          </div>
+      </a>
+
+      <div class="card">
+          <div>
+              <div class="numbers">View Comments</div>
+               
+          </div>
+
+          <div class="iconBx">
+              <ion-icon name="chatbubbles-outline"></ion-icon>
+          </div>
+      </div>
+      -->
+     <!-- <div class="card">
+          <div>
+              <div class="numbers">Employee Birthday</div>
+               <div class="cardName">Earning</div> 
+          </div>
+
+          <div class="iconBx">
+              <ion-icon name="cash-outline"></ion-icon>
+          </div>
+      </div>
+
+      <div class="card">
+          <div>
+              <div class="numbers">Activities</div>
+               <div class="cardName">Earning</div> 
+          </div>
+
+          <div class="iconBx">
+              <ion-icon name="cash-outline"></ion-icon>
+          </div>
+      </div>
+  </div> -->
+
+  <!-- ================ Order Details List ================= -->
+  <!-- <div class="details">
+      <div class="recentOrders" >
+          <div class="cardHeader">
+              <h2>Recent Updates</h2>
+              <a href="#" class="btn">View All</a>
+          </div>
+
+          <table>
+              <thead>
+                  <tr>
+                      <td>Name</td>
+                      
+                      <td>Task</td>
+                      
+                  </tr>
+              </thead>
+
+              <tbody>
+                  <tr>
+                      <td>Chandu</td>
+                      
+                      <td>Working on node.js server</td>
+                      
+                  </tr>
+
+                  <tr>
+                      <td>Jai</td>
+                      
+                      <td>Working on wordpress</td>
+                      
+                  </tr>
+
+                  <tr>
+                      <td>Mani</td>
+                      
+                      <td>Working on hrms</td>
+                      
+                  </tr>
+
+                  <tr>
+                      <td>Akhil</td>
+                      
+                      <td>Working on hrms</td>
+                      
+                  </tr>
+
+                  <tr>
+                      <td>Pravallika</td>
+                      
+                      <td>Working on wordpress</td>
+                      
+                  </tr>
+
+                  <tr>
+                      <td>Priyanka</td>
+                      
+                      <td>Working on node.js server</td>
+                      
+                  </tr>
+
+                  <tr>
+                      <td>Akhila</td>
+                      
+                      <td>Working on testing</td>
+                      
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+
+      
+  </div> -->
+<!-- </div> -->
+</div>
+
+<!-- =========== Scripts =========  -->
+<script src="assets/js/main.js"></script>
+
+<!-- ====== ionicons ======= -->
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+<script>
+ loggedInUserJSON = localStorage.getItem('loggedInUser');
+
+// Parse the JSON string to get the object
+ loggedInUser = JSON.parse(loggedInUserJSON);
+
+// Check if loggedInUser and fullName are present
+if (loggedInUser && loggedInUser.fullName) {
+    // If present, update the HTML element with the full name
+    document.getElementById('fullNameDisplay').textContent = loggedInUser.fullName;
+} else {
+    // If not present, display a default message or handle accordingly
+    document.getElementById('fullNameDisplay').textContent = 'Full name not found in localStorage';
+}
+</script>
+<script>
+  // Fetch teams from MongoDB
+  fetch('http://localhost:4000/api/users')
+    .then(response => response.json())
+    .then(data => {
+      const selectElement = document.getElementById('addTeam');
+      data.forEach(team => {
+        const option = document.createElement('option');
+        option.value = team.fullName;
+        option.textContent = team.fullName;
+        selectElement.appendChild(option);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching teams:', error);
+    });
+</script>
+<script>
+      const loggedInUserJSON = localStorage.getItem('loggedInUser');
+
+    // Parse the JSON string to get the object
+    const loggedInUser = JSON.parse(loggedInUserJSON);
+
+    // Check if loggedInUser and fullName are present
+    if (loggedInUser && loggedInUser.fullName) {
+        // If present, update the HTML element with the full name
+        document.getElementById('fullNameDisplay').textContent = loggedInUser.fullName;
+    } else {
+        // If not present, display a default message or handle accordingly
+        document.getElementById('fullNameDisplay').textContent = 'Full name not found in localStorage';
+    }
+</script>
+<script>
+  async function createTask(event) {
+  event.preventDefault();
+  const form = document.querySelector('form'); // Get the form element
+
+  const taskTitle = form.elements['task'].value;
+  const description = form.elements['description'].value;
+  const selectedTeams = form.elements['addTeam[]'].selectedOptions;1
+
+  // Extract the values of the selected options
+  const addTeam = Array.from(selectedTeams).map(option => option.value);
+
+  const data = {
+    taskTitle: taskTitle,
+    description: description,
+    addTeam: addTeam,
+  };
+  console.log('Data:', data);
+
+  try {
+    const response = await fetch('http://localhost:4000/add/tasks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    console.log('Response:', response);
+    console.log('Data:', data);
+    if (response.ok) {
+      const result = await response.json();
+      //var userName = result.user.taskTitle;
+            console.log('Task created:', result);
+            if (result && result.task && result.task.taskTitle) {
+            localStorage.setItem('taskTitle', result.task.taskTitle);
+            localStorage.setItem('description', result.task.description);
+            console.log(result.task.taskTitle);
+          } else {
+            console.error('Task title is missing in the response:', result);
+          }
+      alert('Task created successfully!');
+      // Redirect to another page after successful task creation
+      window.location.href = 'http://localhost:4000/tasks'; // Change '/another-page.html' to the desired page URL
+    } else {
+      console.error('Error creating task:', response.status, response.statusText);
+    }
+  } catch (error) {
+    console.error('Error creating task:', error);
+  }
+  
+}
+</script>
+
+</body>
+
+</html>

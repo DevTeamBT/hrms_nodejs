@@ -19,6 +19,8 @@
         <h5 id="fullNameDisplay">fullName</h5>
         <button type="button" id="logoutButton" class="btn btn-dark">Log Out</button>
     </div>
+    
+    
     <!-- =============== Navigation ================ -->
     <div class="container">
         <div class="navigation">
@@ -36,7 +38,7 @@
                         <i class="fs-2 bi bi-file-earmark-person"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">My Details</span></a>
                 </li>
                 <li>
-                    <a href="./timesheet.html" class="nav-link px-1 align-middle text-blue">
+                    <a href="/timesheet" class="nav-link px-1 align-middle text-blue">
                         <i class="fs-2 bi bi-clock-history"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Timesheet</span></a>
                 </li>
                 <li>
@@ -51,17 +53,16 @@
                     <a href="./organization.html" class="nav-link px-1 align-middle text-blue">
                         <i class="fs-2 bi bi-diagram-3"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Organization</span></a>
                 </li>
- 
+                
                
             </ul>
         </div>
- 
+        <div class="toggle" onclick="toggleNav()">
+            <ion-icon name="menu-outline"></ion-icon>
+        </div>
         <!-- ========================= Main ==================== -->
         <div class="main">
             <div class="topbar">
-                <div class="toggle">
-                    <ion-icon name="menu-outline"></ion-icon>
-                </div>
  
                 <!-- <div class="search">
                     <label>
@@ -76,70 +77,68 @@
             </div>
  
             <!-- ======================= Cards ================== -->
-             <div class="cardBox">
-                <a href="/Addtask" class="card">
+            <div class="cardBox">
+                <div class="card">
                     <div>
-                        <div class="numbers">Add Task</div>
-                        
+                        <div class="numbers">Track</div>
+                        <!-- <div class="cardName">Contacts</div> -->
                     </div>
  
                     <div class="iconBx">
-                        <ion-icon name="eye-outline"></ion-icon>
+                        <ion-icon name="location-outline" style="color:black"></ion-icon>
                     </div>
-                </a>
- 
-                <a href="./viewupdate.html" class="card">
-                    <div>
-                        <div class="numbers">View Updates</div>
-                         
-                    </div>
- 
-                    <div class="iconBx">
-                        <ion-icon name="cart-outline"></ion-icon>
-                    </div>
-                </a>
+                </div>
  
                 <div class="card">
                     <div>
-                        <div class="numbers">View Comments</div>
-                         
+                        <div class="numbers">Announcements</div>
+                        <!-- <div class="cardName">Sales</div> -->
                     </div>
  
                     <div class="iconBx">
-                        <ion-icon name="chatbubbles-outline"></ion-icon>
+                        <ion-icon name="megaphone-outline" style="color:rgb(160, 11, 11)"></ion-icon>
+                    </div>
+                </div>
+ 
+                <div class="card">
+                    <div>
+                        <div class="numbers">Learning Materials</div>
+                        <!-- <div class="cardName">Comments</div> -->
+                    </div>
+ 
+                    <div class="iconBx">
+                        <ion-icon name="book-outline" style="color:green"></ion-icon>
                     </div>
                 </div>
                
-               <!-- <div class="card">
+                <div class="card">
                     <div>
                         <div class="numbers">Employee Birthday</div>
-                         <div class="cardName">Earning</div> 
+                        <!-- <div class="cardName">Earning</div> -->
                     </div>
  
                     <div class="iconBx">
-                        <ion-icon name="cash-outline"></ion-icon>
+                        <ion-icon name="balloon-outline" style="color:orange"></ion-icon>
                     </div>
                 </div>
  
                 <div class="card">
                     <div>
                         <div class="numbers">Activities</div>
-                         <div class="cardName">Earning</div> 
+                        <!-- <div class="cardName">Earning</div> -->
                     </div>
  
                     <div class="iconBx">
-                        <ion-icon name="cash-outline"></ion-icon>
+                        <ion-icon name="bicycle-outline" style="color:rgb(196, 196, 17)"></ion-icon>
                     </div>
                 </div>
-            </div> -->
+            </div>
  
             <!-- ================ Order Details List ================= -->
             <div class="details">
-                <div class="recentOrders" >
-                    <div class="cardHeader">
+                <div class="recentOrders">
                         <h2>Recent Updates</h2>
-                        <a href="#" class="btn">View All</a>
-                    </div>
+
  
                     <table>
                         <thead>
@@ -200,8 +199,11 @@
                                 <td>Working on testing</td>
                                 
                             </tr>
+ 
+                            
                         </tbody>
                     </table>
+                    <a href="#" class="btn">View All</a>
                 </div>
  
                 
@@ -210,6 +212,25 @@
     </div>
  
     <!-- =========== Scripts =========  -->
+
+    <script>
+        var sidebarOpen = true;
+        function toggleNav() {
+            var sidebar = document.querySelector(".navigation");
+            var toggleBtn = document.querySelector(".toggle");
+            if (sidebarOpen) {
+                sidebar.style.width = "0";
+                sidebar.style.padding = "0";
+                // toggleBtn.textContent = "Show";
+            } else {
+                sidebar.style.width = "250px";
+                sidebar.style.padding = "30px";
+                // toggleBtn.textContent = "Hide";
+  
+            }
+            sidebarOpen = !sidebarOpen;
+        }
+    </script>
     <script src="assets/js/main.js"></script>
  
     <!-- ====== ionicons ======= -->
@@ -217,22 +238,103 @@
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
     <script>
-        const loggedInUserJSON = localStorage.getItem('loggedInUser');
-
-      // Parse the JSON string to get the object
-      const loggedInUser = JSON.parse(loggedInUserJSON);
-
-      // Check if loggedInUser and fullName are present
-      if (loggedInUser && loggedInUser.fullName) {
-          // If present, update the HTML element with the full name
-          document.getElementById('fullNameDisplay').textContent = loggedInUser.fullName;
-      } else {
-          // If not present, display a default message or handle accordingly
-          document.getElementById('fullNameDisplay').textContent = 'Full name not found in localStorage';
-      }
-  </script>
-
+        // Fetch teams from MongoDB
+        fetch('http://localhost:4000/api/users')
+          .then(response => response.json())
+          .then(data => {
+            const selectElement = document.getElementById('addTeam');
+            data.forEach(team => {
+              const option = document.createElement('option');
+              option.value = team.fullName;
+              option.textContent = team.fullName;
+              selectElement.appendChild(option);
+            });
+          })
+          .catch(error => {
+            console.error('Error fetching teams:', error);
+          });
+    </script>
+      <script>
+            const loggedInUserJSON = localStorage.getItem('loggedInUser');
   
+          // Parse the JSON string to get the object
+          const loggedInUser = JSON.parse(loggedInUserJSON);
+  
+          // Check if loggedInUser and fullName are present
+          if (loggedInUser && loggedInUser.fullName) {
+              // If present, update the HTML element with the full name
+              document.getElementById('fullNameDisplay').textContent = loggedInUser.fullName;
+          } else {
+              // If not present, display a default message or handle accordingly
+              document.getElementById('fullNameDisplay').textContent = 'Full name not found in localStorage';
+          }
+      </script>
+  <script>
+        async function createTask(event) {
+        event.preventDefault();
+        const form = document.querySelector('form'); // Get the form element
+  
+        const taskTitle = form.elements['task'].value;
+        const description = form.elements['description'].value;
+        const selectedTeams = form.elements['addTeam[]'].selectedOptions;1
+    
+        // Extract the values of the selected options
+        const addTeam = Array.from(selectedTeams).map(option => option.value);
+  
+        const data = {
+          taskTitle: taskTitle,
+          description: description,
+          addTeam: addTeam,
+        };
+        console.log('Data:', data);
+  
+        try {
+          const response = await fetch('http://localhost:4000/add/tasks', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
+          console.log('Response:', response);
+          console.log('Data:', data);
+          if (response.ok) {
+            const result = await response.json();
+            //var userName = result.user.taskTitle;
+                  console.log('Task created:', result);
+                  if (result && result.task && result.task.taskTitle) {
+                  localStorage.setItem('taskTitle', result.task.taskTitle);
+                  localStorage.setItem('description', result.task.description);
+                  console.log(result.task.taskTitle);
+                } else {
+                  console.error('Task title is missing in the response:', result);
+                }
+            alert('Task created successfully!');
+            // Redirect to another page after successful task creation
+            window.location.href = 'http://localhost:4000/tasks'; // Change '/another-page.html' to the desired page URL
+          } else {
+            console.error('Error creating task:', response.status, response.statusText);
+          }
+        } catch (error) {
+          console.error('Error creating task:', error);
+        }
+        
+      }
+      document.getElementById('logoutButton').addEventListener('click', function () {
+            logout();
+        });
+
+        function logout() {
+            sessionStorage.clear();
+            window.history.replaceState({}, 'login', './login');
+            window.location.href = './login';
+        }
+    </script>
+
+
+
+
+
 </body>
  
 </html>

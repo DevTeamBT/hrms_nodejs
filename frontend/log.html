@@ -15,7 +15,9 @@
         <div>
             <figure><img src="https://bodhtree.com/wp-content/uploads/2016/02/logo-sticky.png"></figure>
             <h4><b>Hello There!&#128075;</b></h4>
+            
         </div>
+
         <form action="/login" method="post" onsubmit="loginUser(event)">
             <div class="mb-3">
                 <label for="officeEmail" class="form-label">User Email</label>
@@ -37,49 +39,58 @@
 
     <div id="result"></div>
     <script>
-        async function loginUser(event) {
-             event.preventDefault();
-            const form = document.querySelector('form');
-            const officeEmail = document.getElementById('officeEmail').value;
-            const enterPassword = document.getElementById('password').value;
+       async function loginUser(event) {
+    event.preventDefault();
+    const form = document.querySelector('form');
+    const officeEmail = document.getElementById('officeEmail').value;
+    const enterPassword = document.getElementById('password').value;
 
-            try {
-                const response = await fetch('http://localhost:4000/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ officeEmail: officeEmail, enterPassword: enterPassword }),
-                });
+    try {
+        const response = await fetch('http://localhost:4000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ officeEmail: officeEmail, enterPassword: enterPassword }),
+        });
 
-                if (response.ok) {
-                    const result = await response.json();
-                    document.getElementById('result').innerText = 'Login successful';
-                    localStorage.setItem('loggedInUser', JSON.stringify(result.user));
-                 
-                    // Determine the user's role
-                    const userRole = result.user.role;
+        if (response.ok) {
+            const result = await response.json();
+            var userName = result.user.fullName;
+            const fullName = localStorage.getItem('fullName');
+            
+            document.getElementById('result').innerText = 'Login successful';
 
-                // Redirect based on the user's role
-                if (userRole === 'admin') {
-                    console.log('Redirecting to /dashboard');
-                    window.location.replace('/dashboard');
-                } else if (userRole === 'employee') {
-                    console.log('Redirecting to /timesheet');
-                    window.location.replace('/timesheet');
-                } else {
-                    console.error('Invalid role:', userRole);
-                    document.getElementById('result').innerText = 'Invalid role';
-                }
-                } else {
-                    const errorResult = await response.json(); 
-                    console.error('Login failed:', errorResult.message);
-                    document.getElementById('result').innerText = 'Invalid officeEmail or enterPassword';
-                }
-            } catch (error) {
-                console.error('Error during login:', error);
+            // Store user information in localStorage
+            localStorage.setItem('loggedInUser', JSON.stringify(result.user));
+            const userRole = result.user.role;
+            //const fullName = result.user.fullName;
+           
+            // Determine the user's role
+            //  const userRole = result.user.role;
+          
+            // Redirect based on the user's role
+            if (userRole === 'admin') {
+                console.log('Redirecting to /dashboard');
+                window.location.replace('/dashboard');
+            } else if (userRole === 'employee') {
+                console.log('Redirecting to /index');
+                window.location.replace('/index');
+            } else {
+                console.error('Invalid role:', userRole);
+                document.getElementById('result').innerText = 'Invalid role';
             }
+        } else {
+            const errorResult = await response.json();
+            console.error('Login failed:', errorResult.message);
+            document.getElementById('result').innerText = 'Invalid officeEmail or enterPassword';
         }
+    } catch (error) {
+        console.error('Error during login:', error);
+    }
+}
+
+
     </script>
 
  <!-- <script>

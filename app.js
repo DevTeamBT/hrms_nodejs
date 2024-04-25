@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 //app.use(bodyParser.json());
 app.use(express.json());
-
+app.set('view engine', 'ejs');
 
 // Connect to MongoDB using Mongoose
 mongoose.connect('mongodb+srv://madabhavipriyanka62:venwkNcLMK3gjCOr@cluster0.0n9xq0f.mongodb.net/mydb', {

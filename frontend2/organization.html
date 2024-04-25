@@ -11,14 +11,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
    
     <!-- ======= Styles ====== -->
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
  
 <body>
-    <div class="login" style="display: flex; justify-content: space-between; align-items: center; position: absolute; top: 10px; right: 10px;">
-        <h5 id="fullNameDisplay">fullName</h5>
-        <button type="button" id="logoutButton" class="btn btn-dark">Log Out</button>
-    </div>
     <!-- =============== Navigation ================ -->
     <div class="container">
         <div class="navigation">
@@ -70,14 +66,14 @@
                     </label>
                 </div> -->
  
-                <!-- <div class="user">
+                <div class="user">
                     <img src="assets/imgs/customer01.jpg" alt="">
-                </div> -->
+                </div>
             </div>
  
             <!-- ======================= Cards ================== -->
-             <div class="cardBox">
-                <a href="/Addtask" class="card">
+             <!-- <div class="cardBox">
+                <div class="card">
                     <div>
                         <div class="numbers">Add Task</div>
                         
@@ -86,9 +82,9 @@
                     <div class="iconBx">
                         <ion-icon name="eye-outline"></ion-icon>
                     </div>
-                </a>
+                </div>
  
-                <a href="./viewupdate.html" class="card">
+                <div class="card">
                     <div>
                         <div class="numbers">View Updates</div>
                          
@@ -97,7 +93,7 @@
                     <div class="iconBx">
                         <ion-icon name="cart-outline"></ion-icon>
                     </div>
-                </a>
+                </div>
  
                 <div class="card">
                     <div>
@@ -108,7 +104,7 @@
                     <div class="iconBx">
                         <ion-icon name="chatbubbles-outline"></ion-icon>
                     </div>
-                </div>
+                </div> -->
                
                <!-- <div class="card">
                     <div>
@@ -134,74 +130,69 @@
             </div> -->
  
             <!-- ================ Order Details List ================= -->
-            <div class="details">
+            <div class="details" >
                 <div class="recentOrders" >
                     <div class="cardHeader">
-                        <h2>Recent Updates</h2>
-                        <a href="#" class="btn">View All</a>
+                        <h2>ORG CHART</h2>
+                        <!-- <a href="#" class="btn">View All</a> -->
                     </div>
- 
                     <table>
-                        <thead>
-                            <tr>
-                                <td>Name</td>
-                                
-                                <td>Task</td>
-                                
-                            </tr>
+                        <thead style="text-align: center;">
+                          <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Reporting To</th>
+                           
+                          </tr>
                         </thead>
- 
                         <tbody>
-                            <tr>
-                                <td>Chandu</td>
-                                
-                                <td>Working on node.js server</td>
-                                
+                          <tr>
+                            <td>1001</td>
+                            <td>Prashanth</td>
+                            <td>Director</td>
+                            <td>-</td>
+                           
+                          </tr>
+                          <tr>
+                            <td>1470</td>
+                            <td>Anil Grandhi</td>
+                            <td>Finance Manager</td>
+                            <td>Prashanth</td>
+                          </tr>
+                          <tr>
+                              <td>1472</td>
+                              <td>Pruthvi Raj Akula</td>
+                              <td>Director Sales</td>
+                              <td>Prashanth</td>
                             </tr>
- 
                             <tr>
-                                <td>Jai</td>
-                                
-                                <td>Working on wordpress</td>
-                                
+                              <td>1474</td>
+                              <td>Afsana Shaik</td>
+                              <td>Sr.Manager-HR Operator</td>
+                              <td>Prashanth</td>
                             </tr>
- 
                             <tr>
-                                <td>Mani</td>
-                                
-                                <td>Working on hrms</td>
-                                
+                              <td>1458</td>
+                              <td>Rajanikanth </td>
+                              <td>Sr.Executive</td>
+                              <td>Anil Grandhi</td>
                             </tr>
- 
                             <tr>
-                                <td>Akhil</td>
-                                
-                                <td>Working on hrms</td>
-                                
+                              <td>1502</td>
+                              <td>Raviteja Reddy</td>
+                              <td>Design Architect</td>
+                              <td>Pruthvi Raj Akula</td>
                             </tr>
- 
                             <tr>
-                                <td>Pravallika</td>
-                                
-                                <td>Working on wordpress</td>
-                                
+                              <td>006</td>
+                              <td>Ponnathota Devika</td>
+                              <td>Executive-Inside Sales</td>
+                              <td>Pruthvi Raj Akula</td>
                             </tr>
- 
-                            <tr>
-                                <td>Priyanka</td>
-                                
-                                <td>Working on node.js server</td>
-                                
-                            </tr>
- 
-                            <tr>
-                                <td>Akhila</td>
-                                
-                                <td>Working on testing</td>
-                                
-                            </tr>
+                          <!-- Add more rows as needed -->
                         </tbody>
-                    </table>
+                      </table>
                 </div>
  
                 
@@ -215,24 +206,6 @@
     <!-- ====== ionicons ======= -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
-    <script>
-        const loggedInUserJSON = localStorage.getItem('loggedInUser');
-
-      // Parse the JSON string to get the object
-      const loggedInUser = JSON.parse(loggedInUserJSON);
-
-      // Check if loggedInUser and fullName are present
-      if (loggedInUser && loggedInUser.fullName) {
-          // If present, update the HTML element with the full name
-          document.getElementById('fullNameDisplay').textContent = loggedInUser.fullName;
-      } else {
-          // If not present, display a default message or handle accordingly
-          document.getElementById('fullNameDisplay').textContent = 'Full name not found in localStorage';
-      }
-  </script>
-
-  
 </body>
  
 </html>

@@ -25,7 +25,7 @@ let upload;
 module.exports = function(app) {
     // Multer setup for file uploads
     upload = multer({ dest: 'upload/' });
-    
+  
     app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
     app.use(passport.initialize());
     app.use(passport.session());
@@ -113,16 +113,26 @@ router.post('/api/users', async (req, res) => {
 router.get('/api/users/:userId', async (req, res) => {
   try {
     const userId = req.params.userId;
-
     // Find the user by ID in the database
     const user = await User.findById(userId);
-
     if (!user) {
       return res.status(404).json({ error: 'User not found', details: 'No user found with the provided ID.' });
     }
-
     // Respond with the retrieved user
     res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error', details: error.message });
+  }
+});
+//get api to gfetch all user names
+router.get('/api/users', async (req, res) => {
+  try {
+    // Fetch all users and select only the fullName field
+    const users = await User.find().select('fullName');
+
+    // Respond with the retrieved users
+    res.status(200).json(users);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error', details: error.message });
@@ -243,7 +253,7 @@ router.get('/users', (req, res) => {
 //post api to login page
 router.post('/login', async (req, res) => {
   try {
-    const { officeEmail, enterPassword } = req.body;
+    const { officeEmail, enterPassword , fullName} = req.body;
     // Find the user in the database by office mail
     const user = await User.findOne({ officeEmail });
     // Check if the user exists
@@ -255,14 +265,17 @@ router.post('/login', async (req, res) => {
         req.session.user = {
           officeEmail: user.officeEmail,
           role: user.role, 
+          fullName: user.fullName,
         };
         // Redirect based on the user's role
         if (req.session.user.role === 'admin') {
+          res.cookie('user', user.fullName, { maxAge: 900000, httpOnly: true });
           res.status(200).json({ message: 'Login successful', user: req.session.user });
           //res.redirect('/frontend/dashboard.html');
         } else if (req.session.user.role === 'employee') {
+          res.cookie('user', user.fullName, { maxAge: 900000, httpOnly: true });
           res.status(200).json({ message: 'Login successful', user: req.session.user });
-          //res.redirect('/frontend/timesheet.html');
+          //res.sendFile(path.join(__dirname, '../frontend/timesheet.html'));
           //return determineUserRole(user)
         } else {
           res.status(401).json({ message: 'Invalid role' });
@@ -287,6 +300,21 @@ router.get('/login', (req, res) => {
 });
 router.get('/login.css', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/login.css'));
+});
+
+//html of index
+router.get('/index', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
+router.get('/style.css', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/style.css'));
+});
+//addtask html
+router.get('/Addtask', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/Addtask.html'));
+});
+router.get('/Addtask.css', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/Addtask.css'));
 });
 
 //reset password
@@ -421,7 +449,6 @@ router.get('/login', (req, res) => {
   const user = User.find();
   // Clear the user session on the login page
   req.session.user = null;
-
   // Serve the login.html content
   res.sendFile(path.join(__dirname, '../frontend/log.html'));
 });
@@ -583,7 +610,7 @@ router.get('/addrequirement', (req, res) => {
 //api for adding employee daily task
 router.post('/add/tasks', async (req, res) => {
   try {
-    const { taskTitle, description, addTeam, createdAt } = req.body;
+    const { taskTitle, description, addTeam, createdAt, fullName} = req.body;
     // Check if required fields are provided
     if (!taskTitle || !addTeam) {
       return res.status(400).json({ error: 'taskTitle and addTeam are required fields' });
@@ -594,6 +621,7 @@ router.post('/add/tasks', async (req, res) => {
           taskTitle,
           description,
           addTeam: teamNames,
+          fullName:fullName,
           createdAt
 
         });
@@ -601,6 +629,7 @@ router.post('/add/tasks', async (req, res) => {
     await newTask.save();
     // Return success response
     res.status(201).json({ message: 'Task created successfully', task: newTask });
+
   } catch (error) {
     console.error('Error adding task:', error);
     res.status(500).json({ error: 'Internal Server Error', details: error.message });
@@ -619,6 +648,22 @@ router.get('/add/tasks', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
 });
+
+// router.get('/add/tasks', async (req, res) => {
+//   try {
+//        const fullName = req.cookies.User;
+//        const user = await User.findOne({ fullName });
+//       if (!user) {
+//           return res.status(401).json({ error: 'Unauthorized', details: 'Please log in to access this resource' });
+//       }
+//       const tasks = await addTask.find();
+//       res.status(200).json(tasks);
+//   } catch (error) {
+//       console.error('Error fetching tasks:', error);
+//       res.status(500).json({ error: 'Internal Server Error', details: error.message });
+//   }
+// });
+
 
 //getall api all tasks of all teams 
 router.get("/tasks",async (req,res)=>{
@@ -667,6 +712,8 @@ router.get("/tasks",async (req,res)=>{
               padding: 30px;
               width: 19%;
               transition: 0.5s;
+              
+              
           }
           .image{
               margin-bottom: 20px;
@@ -734,40 +781,42 @@ router.get("/tasks",async (req,res)=>{
         </head>
         <body>
           <nav class="flex-column">
-            <div id="main">
-              <button class="openbtn" onclick="toggleNav()">☰</button>
-            </div>
-            <img
-              class="image"
-              src="https://bodhtree.com/wp-content/uploads/2016/02/logo-sticky.png"
-            />
-            <a class="nav-link" href="#">Home</a>
-            <span class="nav-link">
-              Admin
-              <span id="subitems">
-                <ul>
-                  <li><a href="{% url 'login' %}">Hr</a></li>
-                  <li><a href="{% url 'login' %}">Sales</a></li>
-                  <li><a href="{% url 'login' %}">Recruting</a></li>
-                </ul>
-              </span>
-            </span>
-            <a class="nav-link" href="#">Tickets</a>
-            <a class="nav-link" href="#">Forums</a>
-            <a class="nav-link" href="#">Contacts</a>
-            <div class="login">
-              <h5>Profile</h5>
-              <img src="{% static 'images/user.png' %}" alt="propic" />
-              <button type="button" id="logoutButton" class="btn btn-dark">Log Out</button>
-            </div>
-          </nav>
+      <div id="main">
+        <button class="openbtn" onclick="toggleNav()">☰</button>
+      </div>
+      <img
+        class="image"
+        src="https://bodhtree.com/wp-content/uploads/2016/02/logo-sticky.png"
+      />
+      <a class="nav-link" href="#">Home</a>
+      <!-- <span class="nav-link">
+        Admin
+        <span id="subitems">
+          <ul>
+            <li><a href="{% url 'login' %}">Hr</a></li>
+            <li><a href="{% url 'login' %}">Sales</a></li>
+            <li><a href="{% url 'login' %}">Recruting</a></li>
+          </ul>
+        </span>
+      </span> -->
+      <a class="nav-link" href="#">My Details</a>
+      <a class="nav-link" href="./timesheet">Timesheet</a>
+      <a class="nav-link" href="#">Resources</a>
+      <a class="nav-link" href="#">Forums</a>
+      <a class="nav-link" href="#">Organization</a>
+      <div class="login">
+        <h5 id="fullNameDisplay">fullName</h5>
+        <img src="" alt="propic" />
+        <button type="button" id="logoutButton" class="btn btn-dark">Log Out</button>
+      </div>
+    </nav>
           <div class="container">
                 <div class="mb-3 row">
                   <div class="col-sm-4">
             </form>
           </div>
             <table class="table">
-              <h4>Recent Updates:</h4>
+              <h4>View Updates:</h4>
               <thead>
               <tr>
               <th>#</th>
@@ -780,16 +829,94 @@ router.get("/tasks",async (req,res)=>{
               ${tasks.map((tasks, index) => `
                 <tr>
                   <td>${index + 1}</td>
-           <td><a href="/taskTitlePage" target="_blank">${tasks.taskTitle}</a></td>
-          <td>${tasks.description}</td>
-          <td>${tasks.addTeam.join(', ')}</td>
-          <th>${tasks.createdAt}</th>
+                  <td>
+                  <a href="#" id="taskTitleDisplay" data-task-id="${tasks._id}" data-description="${tasks.description}" onClick="handleClick(event)">${tasks.taskTitle}</a>
+                </td>
+                <td>${tasks.description}</td>
+                <td>${tasks.addTeam.join(', ')}</td>
+                <th>${tasks.createdAt}</th>
                 </tr>
               `).join('')}
             </tbody>
           </table>
-        </body>
+        <script>
+          const loggedInUserJSON = localStorage.getItem('loggedInUser');
+        // Parse the JSON string to get the object
+        const loggedInUser = JSON.parse(loggedInUserJSON);
+
+        // Check if loggedInUser and fullName are present
+        if (loggedInUser && loggedInUser.fullName) {
+            // If present, update the HTML element with the full name
+            document.getElementById('fullNameDisplay').textContent = loggedInUser.fullName;
+        } else {
+            // If not present, display a default message or handle accordingly
+            document.getElementById('fullNameDisplay').textContent = 'Full name not found in localStorage';
+        }
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const taskLinks = document.querySelectorAll('.task-link');
+      taskLinks.forEach(taskLink => {
+          taskLink.addEventListener('click', handleClick);
+      });
+      async function handleClick(event) {
+          event.preventDefault(); // Prevent the default link behavior
+  
+          const taskId = event.currentTarget.dataset.taskId;
+          retrieveTaskData(taskId);
+      }
+      async function retrieveTaskData(taskId) {
+          try {
+              const response = await fetch('http://localhost:4000/taskTitlePage/taskId');
+              if (response.ok) {
+                  const taskData = await response.json();
+                  const currentDate = new Date().toISOString();
+                  // Store task title and description in sessionStorage with unique keys
+                  localStorage.setItem('taskTitle_' + currentDate, taskData.taskTitle);
+                  localStorage.setItem('taskDescription_' + currentDate, taskData.taskDescription);
+                  // Redirect to the task title page
+                  window.open('/taskTitlePage', '_blank');
+              } else {
+                  console.error('Error retrieving task data:', response.status, response.statusText);
+              }
+          } catch (error) {
+              console.error('Error retrieving task data:', error);
+          }
+      }
+  });
+  // Function to handle click on task title link
+function handleClick(event) {
+    event.preventDefault(); // Prevent the default link behavior
+    // Retrieve the task title from the link's text content
+    const taskTitle = event.currentTarget.textContent.trim();
+    // Retrieve the description from the link's data-description attribute
+    const description = event.currentTarget.getAttribute('data-description').trim();
+    // Store both task title and description in localStorage
+    localStorage.setItem('selectedTaskTitle', taskTitle);
+    localStorage.setItem('selectedDescription', description);
+    // Redirect to the taskTitlePage
+    window.location.href = '/taskTitlePage';
+}
+// Add click event listener to task title links
+document.addEventListener('DOMContentLoaded', () => {
+    const taskLinks = document.querySelectorAll('.task-link');
+    taskLinks.forEach(taskLink => {
+        taskLink.addEventListener('click', handleClick);
+    });
+});
+// Code for taskTitlePage
+document.addEventListener('DOMContentLoaded', () => {
+    // Retrieve task title and description from localStorage
+    const taskTitle = localStorage.getItem('selectedTaskTitle');
+    const description = localStorage.getItem('selectedDescription');
+    // Display task title and description on the page
+    document.getElementById('taskTitle').textContent = taskTitle;
+    document.getElementById('description').textContent = description;
+});
+</script>
+    </body>
         </html>
+       
       `);
           
   } catch (error) {
@@ -840,7 +967,7 @@ router.post('/tasks/:_id', async (req, res) => {
 //   }
 // });
 
-router.get('/task-details/:taskId', async (req, res) => {
+router.get('/tasks/titles/_id', async (req, res) => {
   try {
     const { taskId } = req.params;
     const task = await addTask.findById(taskId).populate('comments'); // Populate the 'comments' field
@@ -895,19 +1022,37 @@ router.get('/tasks/titles', async (req, res) => {
   }
 });
 
-router.get('/tasks/titles/:_id', async (req, res) => {
-  const _id = req.params._id;
+router.get('/taskTitlePage/:taskId', async (req, res) => {
   try {
-    const task = await addTask.findOne({ _id }, { _id: 0, taskTitle: 1 });
+    const taskId = req.params.taskId;
+    // Fetch task details from the database based on the task ID
+    const task = await addTask.findById(taskId);
+    // Check if the task exists
     if (!task) {
       return res.status(404).json({ error: 'Task not found' });
     }
-    res.status(200).json({ taskTitle: task.taskTitle });
+    // If the task exists, return it
+    res.json(task);
   } catch (error) {
-    console.error('Error fetching task:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error fetching task details:', error);
+    res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
 });
+
+// router.get('/api/tasks/title/:taskTitle', async (req, res) => {
+//   const taskTitle = req.params.taskTitle;
+//   try {
+//     const task = await addTask.findOne({ taskTitle });
+//     if (!task) {
+//       return res.status(404).json({ error: 'Task not found' });
+//     }
+//     res.status(200).json({ taskTitle: taskTitle });
+//   } catch (error) {
+//     console.error('Error fetching task:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
+
 
 
 // Update an existing task with given data
@@ -926,7 +1071,6 @@ router.put('/tasks/:taskTitle', async (req, res) => {
     res.status(500).json({ error: err.message || "A problem occurred updating the task" });
   }
 });
-
 
 
 

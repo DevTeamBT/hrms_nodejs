@@ -16,6 +16,9 @@ body {
     padding: 30px;
     width: 15%;
     transition: 0.5s;
+    position: fixed;
+    height: 100%;
+    
 }
 .image{
     margin-bottom: 20px;
@@ -83,3 +86,13 @@ h5{
   .openbtn:hover {
     background-color: #444;
   }
+  .top-right {
+    position: fixed;
+    top: 10px; /* Adjust top spacing as needed */
+    right: 10px; /* Adjust right spacing as needed */
+    background-color: #ffffff; /* Background color */
+    padding: 5px 10px; /* Padding around the text */
+    border: 1px solid #cccccc; /* Border around the element */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 14px; /* Font size */
+}

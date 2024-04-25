@@ -22,6 +22,11 @@
       body{
         display: flex;
     }
+    #taskTitle {
+            text-align: center;
+          
+            margin-top: 50px; /* Adjust margin as needed */
+        }
     .flex-column {
         background-color: lightgrey;
         padding: 30px;
@@ -104,6 +109,7 @@
       .openbtn:hover {
         background-color: #444;
       }
+    
     </style>
   </head>
  
@@ -117,7 +123,7 @@
         src="https://bodhtree.com/wp-content/uploads/2016/02/logo-sticky.png"
       />
       <a class="nav-link" href="#">Home</a>
-      <span class="nav-link">
+      <!-- <span class="nav-link">
         Admin
         <span id="subitems">
           <ul>
@@ -126,38 +132,36 @@
             <li><a href="{% url 'login' %}">Recruting</a></li>
           </ul>
         </span>
-      </span>
-      <a class="nav-link" href="#">Tickets</a>
+      </span> -->
+      <a class="nav-link" href="#">My Details</a>
+      <a class="nav-link" href="./timesheet">Timesheet</a>
+      <a class="nav-link" href="#">Resources</a>
       <a class="nav-link" href="#">Forums</a>
-      <a class="nav-link" href="#">Contacts</a>
+      <a class="nav-link" href="#">Organization</a>
       <div class="login">
-        <h5>Profile</h5>
+        <h5 id="fullNameDisplay">fullName</h5>
         <img src="" alt="propic" />
         <button type="button" id="logoutButton" class="btn btn-dark">Log Out</button>
       </div>
     </nav>
  
     <div class="container">
-      <h4 class="mb-3 timesheet">${tasks.taskTitle}</h4>
-      <div id="taskTitlesContainer"></div>
+      <h4 class="mb-3 timesheet" id="title" onClick="fetchAndDisplayTasks()"><h1 id="taskTitle" ></h1></h4>
+   
+        <div class="mb-3 row">
+          <label for="description" class="col-sm-4 col-form-label"
+            >Description:</label
+          >   
+          <div class="col-sm-4"><h4 id="description"></h4>
+          </div>
+      </div>
       <!-- <div id="taskDetailsContainer"></div> -->
       <div class="form">
         <form action="/tasks/:taskTitle" method="post">
-          <div class="mb-3 row">
-            <label for="description" class="col-sm-4 col-form-label"
-              >Description:</label
-            >
-            <div class="col-sm-4">
-              <textarea
-                class="form-control"
-                placeholder="DESCRIPTION"
-                name="description"
-                required
-              ></textarea>
-            </div>
+          
           </div>
           <div class="mb-3 row">
-            <label for="comment" class="col-sm-4 col-form-label"
+            <label for="comment" id="comment" class="col-sm-4 col-form-label"
               >Comment:</label
             >
             <div class="mb-3 col-sm-4">
@@ -179,8 +183,31 @@
             </div>
           </div>
         </form>
-      </div>
-    </div>
+      <!-- </div> -->
+    <!-- </div> -->
+    <!-- <div class="grid"> -->
+      <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">S.No</th>
+          <th scope="col">Comments</th>
+          <th scope="col">Commented BY</th>
+          <th scope="col">Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+       
+      </tbody>
+    </table>
+  </div>
+  
+    
     <script>
       var sidebarOpen = true;
       function toggleNav() {
@@ -204,9 +231,10 @@
  
         function logout() {
             sessionStorage.clear();
-            window.history.replaceState({}, 'Login', 'http://127.0.0.1:8000/bodhtree/login/');
-            window.location.href = 'http://127.0.0.1:8000/bodhtree/login/';
+            window.history.replaceState({}, 'login', '/login');
+            window.location.href = '/login';
         }
+        </script>
     </script>
  
 <div id="taskDetails"></div>
@@ -287,74 +315,99 @@
       document.getElementById('taskDetails').innerHTML = '<p>No taskTitle provided</p>';
   }
   </script> -->
+  <script>
+    const loggedInUserJSON = localStorage.getItem('loggedInUser');
+  
+  // Parse the JSON string to get the object
+  const loggedInUser = JSON.parse(loggedInUserJSON);
+  
+  // Check if loggedInUser and fullName are present
+  if (loggedInUser && loggedInUser.fullName) {
+      // If present, update the HTML element with the full name
+      document.getElementById('fullNameDisplay').textContent = loggedInUser.fullName;
+  } else {
+      // If not present, display a default message or handle accordingly
+      document.getElementById('fullNameDisplay').textContent = 'Full name not found in localStorage';
+  }
+  </script>
 
-<script>
-        // Function to fetch task titles by ID
-        async function fetchTaskTitlesById(taskId) {
-            try {
-                const endpoint = `http://localhost:4000/tasks/titles/:_id`;
-                const response = await fetch(endpoint);
+ <script>
 
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch task titles for id ${taskId}`);
-                }
+    async function addComment(taskId) {
+        // Retrieve comment text from the input field
+        const commentText = document.getElementById('commentInput').value;
 
-                const responseData = await response.json();
+        try {
+            // Send a POST request to the server to add the comment
+            const response = await fetch(`http://localhost:4000/tasks/${taskId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ comments: [{ text: commentText }] })
+            });
 
-                // Display task titles
-                displayTaskTitles(responseData);
-            } catch (error) {
-                console.error('Error fetching task titles:', error);
-                // Display an error message on the UI
-                displayErrorMessage(error.message);
-            }
-        }
-
-        // Function to handle click events
-        function handleClick(event) {
-            const taskId = event.target.dataset.taskId;
-
-            // Call fetchTaskTitlesById with the task ID
-            fetchTaskTitlesById(taskId);
-        }
-
-        // Attach event listeners to elements with the 'task-link' class
-        document.querySelectorAll('.task-link').forEach(link => {
-            link.addEventListener('click', handleClick);
-        });
-
-        // Function to display task titles
-        function displayTaskTitles(taskTitles) {
-            const taskTitlesContainer = document.getElementById('taskTitlesContainer');
-            taskTitlesContainer.innerHTML = ''; // Clear previous content
-
-            if (Array.isArray(taskTitles) && taskTitles.length > 0) {
-                taskTitles.forEach(taskTitle => {
-                    const titleElement = document.createElement('h4');
-                    titleElement.textContent = taskTitle.taskTitle;
-                    titleElement.classList.add('mb-3', 'timesheet');
-                    taskTitlesContainer.appendChild(titleElement);
-                });
+            // Check if the request was successful
+            if (response.ok) {
+                const updatedTask = await response.json();
+                // Optionally, update the UI with the updated task information
+                console.log('Comment added successfully:', updatedTask);
+                // Clear the input field after adding the comment
+                document.getElementById('commentInput').value = '';
             } else {
-                // If no task titles found, display a message
-                const messageElement = document.createElement('p');
-                messageElement.textContent = 'No task titles found';
-                taskTitlesContainer.appendChild(messageElement);
+                // Handle errors if the request was not successful
+                console.error('Failed to add comment:', response.status, response.statusText);
             }
+        } catch (error) {
+            console.error('Error adding comment:', error);
         }
+    }
 
-        // Function to display error messages
-        function displayErrorMessage(message) {
-            const taskTitlesContainer = document.getElementById('taskTitlesContainer');
-            taskTitlesContainer.innerHTML = ''; // Clear previous content
+</script>
 
-            const errorElement = document.createElement('p');
-            errorElement.textContent = message;
-            errorElement.style.color = 'red';
+<!-- taskTitle from localStorage -->
+    <script>
+      
+        // Retrieve the stored task title from localStorage
+        const taskTitle = localStorage.getItem('selectedTaskTitle');
 
-            taskTitlesContainer.appendChild(errorElement);
+        // Check if the task title exists
+        if (taskTitle) {
+            // If it exists, display it on the page
+            document.getElementById('taskTitle').textContent = taskTitle;
+        } else {
+            // If it doesn't exist, display a default message or handle accordingly
+            document.getElementById('taskTitle').textContent = 'Task title not found in localStorage';
         }
+    
     </script>
+    <script>
+       // Retrieve the stored description from localStorage
+        const description = localStorage.getItem('selectedDescription');
+
+        // Check if the description exists
+        if (description) {
+            // If it exists, display it on the page
+            document.getElementById('description').textContent = description;
+        } else {
+            // If it doesn't exist, display a default message or handle accordingly
+            document.getElementById('description').textContent = 'Description not found in localStorage';
+        }
+
+      // document.addEventListener('DOMContentLoaded', () => {
+      //     // Retrieve the task title from localStorage
+      //     const description = localStorage.getItem('description');
+
+      //     // Check if the task title exists
+      //     if (description) {
+      //         // Update the task title in the DOM
+      //         document.getElementById('description').textContent = description;
+      //     } else {
+      //         // If task title is not found, display a default message or handle accordingly
+      //         document.getElementById('description').textContent = 'Task Title Not Found';
+      //     }
+      // });
+  </script>
 
 
 

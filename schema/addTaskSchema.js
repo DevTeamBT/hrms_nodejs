@@ -7,17 +7,20 @@ const addTaskSchema = new mongoose.Schema({
   description: {type:"string"},
   addTeam: {type: [String], required: true},
   comments: [{
-    text: {type: [String], required: true},
+    text: {type: [String], required: true, active: Boolean},
     createdAt: {
         type: Date,
-        default: Date.now // Automatically set to the current timestamp when a new document is created
+        default: Date.now 
     }
 }],
   //addTimeStamp :{type:date}
   createdAt: {
     type: Date,
-    default: Date.now // Automatically set to the current timestamp when a new document is created
-  }
+    default: Date.now 
+
+}
+// Automatically set to the current timestamp when a new document is created
+  
 });
 
 const addTask = mongoose.model('addTask', addTaskSchema);
