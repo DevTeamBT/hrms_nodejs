@@ -20,18 +20,43 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   </head>
   <body>
-    <nav class="flex-column">
-      <ul>
-        <img class="image" src="https://bodhtree.com/wp-content/uploads/2016/02/logo-sticky.png" />
-        <li><a href="./index.html" class="nav-link"><i class="fs-2 bi bi-house-door"></i><span>Home</span></a></li>
-        <li><a href="./mydetails.html" class="nav-link"><i class="fs-2 bi bi-file-earmark-person"></i><span>My Details</span></a></li>
-        <li><a href="./timesheet.html" class="nav-link"><i class="fs-2 bi bi-clock-history"></i><span>Timesheet</span></a></li>
-        <li><a href="./resources.html" class="nav-link"><i class="fs-2 bi bi-gear-wide-connected"></i><span>Resources</span></a></li>
-        <li><a href="#" class="nav-link"><i class="fs-2 bi bi-chat-left-text"></i><span>Forums</span></a></li>
-        <li><a href="./organization.html" class="nav-link"><i class="fs-2 bi bi-diagram-3"></i><span>Organization</span></a></li>
-      </ul>
+    <!-- <nav class="flex-column"> -->
+      <div class="navigation">
+        <ul>
+            <li>
+                <a href="#">
+                    <span class="title">Employee - login</span>
+                </a>
+            </li>
+            <li>
+                <a href="./index" class="nav-link px-1 align-middle text-blue">
+                    <i class="fs-2 bi bi-house-door"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Home</span></a>
+            </li><li>
+                <a href="./mydetails" class="nav-link px-1 align-middle text-blue">
+                    <i class="fs-2 bi bi-file-earmark-person"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">My Details</span></a>
+            </li>
+            <li>
+                <a href="./timesheet" class="nav-link px-1 align-middle text-blue">
+                    <i class="fs-2 bi bi-clock-history"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Timesheet</span></a>
+            </li>
+            <li>
+                <a href="./resources" class="nav-link px-1 align-middle text-blue">
+                    <i class="fs-2 bi bi-gear-wide-connected"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Resources</span></a>
+            </li>
+            <li>
+                <a href="#" class="nav-link px-1 align-middle text-blue">
+                    <i class="fs-2 bi bi-chat-left-text"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Forums</span></a>
+            </li>
+            <li>
+                <a href="./organization" class="nav-link px-1 align-middle text-blue">
+                    <i class="fs-2 bi bi-diagram-3"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Organization</span></a>
+            </li>
+
+           
+        </ul>
+    </div>
      
-    </nav>
+    <!-- </nav> -->
     <div class="login" style="display: flex; justify-content: space-between; align-items: center; position: absolute; top: 10px; right: 10px;">
       <h5 id="fullNameDisplay">fullName</h5>
       <button type="button" id="logoutButton" class="btn btn-dark">Log Out</button>

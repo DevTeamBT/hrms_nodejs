@@ -126,11 +126,10 @@ router.get('/api/users/:userId', async (req, res) => {
   }
 });
 //get api to gfetch all user names
-router.get('/api/users', async (req, res) => {
+router.get('/users', async (req, res) => {
   try {
     // Fetch all users and select only the fullName field
     const users = await User.find().select('fullName');
-
     // Respond with the retrieved users
     res.status(200).json(users);
   } catch (error) {
@@ -138,6 +137,7 @@ router.get('/api/users', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
 });
+
 
 //html and css of sign up page create user
 router.get('/api/users', (req, res) => {
@@ -683,185 +683,203 @@ router.get("/tasks",async (req,res)=>{
    // Respond with HTML table
    res.status(200).send(`
    <!DOCTYPE html>
- 
-
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-     <link rel="stylesheet" href="./viewupdate.css" /> 
-    <title>Document</title>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="stylesheet" href="./viewupdate.css" /> 
+      <title>Document</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </head>
+    <body>
+    <style>
+    :root {
+      --blue: #2a2185;
+      --white: #fff;
+      --gray: #f5f5f5;
+      --black1: #222;
+      --black2: #999;
+  }
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+    }
+    .flex-column {
+      position: fixed;
+      width: 250px;
+      height: 100%;
+      background: var(--blue);
+      border-left: 10px solid var(--blue);
+      transition: 0.5s;
+      overflow: hidden;
+    }   
+    .flex-column ul {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  </head>
-  <body>
-  <style>
-  :root {
-    --blue: #2a2185;
-    --white: #fff;
-    --gray: #f5f5f5;
-    --black1: #222;
-    --black2: #999;
-}
-  body {
-    min-height: 100vh;
-    overflow-x: hidden;
-    display: flex;
+    .flex-column ul li{
+      position: relative;
+      width: 100%;
+      list-style: none;
+      border-top-left-radius: 30px;
+      border-bottom-left-radius: 30px;
+    }
+    
+    .flex-column ul li:hover,
+    .flex-column ul li.hovered {
+      background-color: var(--white);
+    }
+  .flex-column .image {
+      margin-top: 30px;
+      margin-bottom: 20px;
+      padding-left: 10px;
+      padding-bottom: 10%;
   }
-  .flex-column {
-    position: fixed;
-    width: 250px;
-    height: 100%;
-    background: var(--blue);
-    border-left: 10px solid var(--blue);
-    transition: 0.5s;
-    overflow: hidden;
-  }   
-  .flex-column ul {
+  .flex-column span{
+      padding-left: 20px;
+      font-size: 1.3rem;
+      font-weight: 450;
+      padding-top: .5rem;
+  }
+  .flex-column ul li a{
+      position: relative;
+      display: block;
+      width: 100%;
+      display: flex;
+      text-decoration: none;
+      color: var(--white);
+  }
+
+
+  .flex-column ul li:hover a::before,
+  .flex-column ul li.hovered a::before {
+    content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
-   
-  .flex-column ul li{
-    position: relative;
-    width: 100%;
-    list-style: none;
-    border-top-left-radius: 30px;
-    border-bottom-left-radius: 30px;
-  }
-   
-  .flex-column ul li:hover,
-  .flex-column ul li.hovered {
-    background-color: var(--white);
-  }
-.flex-column .image {
-    margin-top: 30px;
-    margin-bottom: 20px;
-    padding-left: 10px;
-    padding-bottom: 10%;
-}
-.flex-column span{
-    padding-left: 20px;
-    font-size: 1.3rem;
-    font-weight: 450;
-    padding-top: .5rem;
-}
-.flex-column ul li a{
-    position: relative;
-    display: block;
-    width: 100%;
-    display: flex;
-    text-decoration: none;
-    color: var(--white);
-}
-
-
-.flex-column ul li:hover a::before,
-.flex-column ul li.hovered a::before {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: -50px;
-  width: 50px;
-  height: 50px;
-  background-color: transparent;
-  border-radius: 50%;
-  box-shadow: 35px 35px 0 10px var(--white);
-  pointer-events: none;
-}
-.flex-column ul li:hover a::after,
-.flex-column ul li.hovered a::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: -50px;
-  width: 50px;
-  height: 50px;
-  background-color: transparent;
-  border-radius: 50%;
-  box-shadow: 35px -35px 0 10px var(--white);
-  pointer-events: none;
-}
-
-.login {
-    padding-top: 10px;
-    display: flex;
-    align-items: center;
-    position: absolute;
-    top: 0;
     right: 0;
-    margin: 10px;
-}
-.container {
-    width: 80%;
-    margin-bottom: 16%;
-    font-size: large;
-}
+    top: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px 35px 0 10px var(--white);
+    pointer-events: none;
+  }
+  .flex-column ul li:hover a::after,
+  .flex-column ul li.hovered a::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px -35px 0 10px var(--white);
+    pointer-events: none;
+  }
 
-h4 {
-    margin-bottom: 40px;
-    text-align: center;
-    padding: 10px;
-}
-h5{
-    margin-top: 14px;
-}
-.buttons{
-    padding-left: 29%;
-    padding-top: 20px;
-}
-.login img{
-    height: 25px;
-    width: 25px;
-    margin-right: 20px;
-}
-.openbtn {
-    text-decoration: none;
-    background-color: black;
-    margin-left: 50px;
-    font-size: 17px;
-    cursor: pointer;
-    color: white;
-    border-radius: 5px;
+  .login {
+      padding-top: 10px;
+      display: flex;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 10px;
   }
-  .openbtn:hover {
-    background-color: #444;
+  .container {
+      width: 80%;
+      margin-bottom: 16%;
+      font-size: large;
   }
-  .top-right {
-    position: fixed;
-    top: 10px; /* Adjust top spacing as needed */
-    right: 10px; /* Adjust right spacing as needed */
-    background-color: #ffffff; /* Background color */
-    padding: 5px 10px; /* Padding around the text */
-    border: 1px solid #cccccc; /* Border around the element */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 14px; /* Font size */
-}
-table{
-    margin-left: 130px;
-}
-</style>
-    <nav class="flex-column">
+
+  h4 {
+      margin-bottom: 40px;
+      text-align: center;
+      padding: 10px;
+  }
+  h5{
+      margin-top: 14px;
+  }
+  .buttons{
+      padding-left: 29%;
+      padding-top: 20px;
+  }
+  .login img{
+      height: 25px;
+      width: 25px;
+      margin-right: 20px;
+  }
+  .openbtn {
+      text-decoration: none;
+      background-color: black;
+      margin-left: 50px;
+      font-size: 17px;
+      cursor: pointer;
+      color: white;
+      border-radius: 5px;
+    }
+    .openbtn:hover {
+      background-color: #444;
+    }
+    .top-right {
+      position: fixed;
+      top: 10px; /* Adjust top spacing as needed */
+      right: 10px; /* Adjust right spacing as needed */
+      background-color: #ffffff; /* Background color */
+      padding: 5px 10px; /* Padding around the text */
+      border: 1px solid #cccccc; /* Border around the element */
+      border-radius: 5px; /* Rounded corners */
+      font-size: 14px; /* Font size */
+  }
+  table{
+      margin-left: 130px;
+  }
+  </style>
+      <nav class="flex-column">
       <ul>
-        <img class="image" src="https://bodhtree.com/wp-content/uploads/2016/02/logo-sticky.png" />
-        <li><a href="./index.html" class="nav-link"><i class="fs-2 bi bi-house-door"></i><span>Home</span></a></li>
-        <li><a href="./mydetails.html" class="nav-link"><i class="fs-2 bi bi-file-earmark-person"></i><span>My Details</span></a></li>
-        <li><a href="./timesheet.html" class="nav-link"><i class="fs-2 bi bi-clock-history"></i><span>Timesheet</span></a></li>
-        <li><a href="./resources.html" class="nav-link"><i class="fs-2 bi bi-gear-wide-connected"></i><span>Resources</span></a></li>
-        <li><a href="#" class="nav-link"><i class="fs-2 bi bi-chat-left-text"></i><span>Forums</span></a></li>
-        <li><a href="./organization.html" class="nav-link"><i class="fs-2 bi bi-diagram-3"></i><span>Organization</span></a></li>
-      </ul>
+      <li>
+          <a href="#">
+              <span class="title">Employee - login</span>
+          </a>
+      </li>
+      <li>
+          <a href="./index" class="nav-link px-1 align-middle text-blue">
+              <i class="fs-2 bi bi-house-door"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Home</span></a>
+      </li><li>
+          <a href="./mydetails" class="nav-link px-1 align-middle text-blue">
+              <i class="fs-2 bi bi-file-earmark-person"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">My Details</span></a>
+      </li>
+      <li>
+          <a href="./timesheet" class="nav-link px-1 align-middle text-blue">
+              <i class="fs-2 bi bi-clock-history"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Timesheet</span></a>
+      </li>
+      <li>
+          <a href="./resources" class="nav-link px-1 align-middle text-blue">
+              <i class="fs-2 bi bi-gear-wide-connected"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Resources</span></a>
+      </li>
+      <li>
+          <a href="#" class="nav-link px-1 align-middle text-blue">
+              <i class="fs-2 bi bi-chat-left-text"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Forums</span></a>
+      </li>
+      <li>
+          <a href="./organization" class="nav-link px-1 align-middle text-blue">
+              <i class="fs-2 bi bi-diagram-3"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Organization</span></a>
+      </li>
+  </ul>
     </nav>
     <div class="login" style="display: flex; justify-content: space-between; align-items: center; position: absolute; top: 10px; right: 10px;">
       <h5 id="fullNameDisplay">fullName</h5>
@@ -951,6 +969,7 @@ function handleClick(event) {
     // Store both task title and description in localStorage
     localStorage.setItem('selectedTaskTitle', taskTitle);
     localStorage.setItem('selectedDescription', description);
+    
     // Redirect to the taskTitlePage
     window.location.href = '/taskTitlePage';
 }
@@ -983,11 +1002,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 //api to add taskTitle and description and comments
-router.post('/tasks/:_id', async (req, res) => {
+router.post('/tasks/:taskTitle', async (req, res) => {
   try {
-    const { _id } = req.params;
+    const { taskTitle } = req.params; // Change _id to taskTitle
     const { comments } = req.body;
-    let task = await addTask.findOne({ _id });
+    let task = await addTask.findOne({ taskTitle }); // Change _id to taskTitle
     if (!task) {
       return res.status(404).json({ error: 'Task not found' });
     }
@@ -1010,6 +1029,7 @@ router.post('/tasks/:_id', async (req, res) => {
     res.status(500).json({ error: 'Failed to add comment to the task' });
   }
 });
+
 
 
 
@@ -1130,7 +1150,6 @@ router.put('/tasks/:taskTitle', async (req, res) => {
 });
 
 
-
 //extrating data country,state,city
 router.post('/extract-data', async (req, res) => {
   try {
@@ -1155,6 +1174,20 @@ router.post('/extract-data', async (req, res) => {
     console.error('Error extracting data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+});
+
+
+//html for resourses
+router.get('/resources', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/resources.html'));
+});
+//html for mydetails
+router.get('/mydetails', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/mydetails.html'));
+});
+//html for org
+router.get('/organization', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/organization.html'));
 });
 
 module.exports = router;

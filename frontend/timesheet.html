@@ -29,18 +29,18 @@
                     </a>
                 </li>
                 <li>
-                    <a href="./index.html" class="nav-link px-1 align-middle text-blue">
+                    <a href="./index" class="nav-link px-1 align-middle text-blue">
                         <i class="fs-2 bi bi-house-door"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Home</span></a>
                 </li><li>
-                    <a href="./mydetails.html" class="nav-link px-1 align-middle text-blue">
+                    <a href="./mydetails" class="nav-link px-1 align-middle text-blue">
                         <i class="fs-2 bi bi-file-earmark-person"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">My Details</span></a>
                 </li>
                 <li>
-                    <a href="./timesheet.html" class="nav-link px-1 align-middle text-blue">
+                    <a href="./timesheet" class="nav-link px-1 align-middle text-blue">
                         <i class="fs-2 bi bi-clock-history"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Timesheet</span></a>
                 </li>
                 <li>
-                    <a href="./resources.html" class="nav-link px-1 align-middle text-blue">
+                    <a href="./resources" class="nav-link px-1 align-middle text-blue">
                         <i class="fs-2 bi bi-gear-wide-connected"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Resources</span></a>
                 </li>
                 <li>
@@ -48,7 +48,7 @@
                         <i class="fs-2 bi bi-chat-left-text"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Forums</span></a>
                 </li>
                 <li>
-                    <a href="./organization.html" class="nav-link px-1 align-middle text-blue">
+                    <a href="./organization" class="nav-link px-1 align-middle text-blue">
                         <i class="fs-2 bi bi-diagram-3"></i> <span class="fs-5 ms-4 d-none d-sm-inline pt-2">Organization</span></a>
                 </li>
  
@@ -59,7 +59,7 @@
         <!-- ========================= Main ==================== -->
         <div class="main">
             <div class="topbar">
-                <div class="toggle">
+                <div class="toggle" onclick="toggleNav()">
                     <ion-icon name="menu-outline"></ion-icon>
                 </div>
  
@@ -210,6 +210,24 @@
     </div>
  
     <!-- =========== Scripts =========  -->
+    <script>
+        var sidebarOpen = true;
+        function toggleNav() {
+            var sidebar = document.querySelector(".navigation");
+            var toggleBtn = document.querySelector(".toggle");
+            if (sidebarOpen) {
+                sidebar.style.width = "0";
+                sidebar.style.padding = "0";
+                // toggleBtn.textContent = "Show";
+            } else {
+                sidebar.style.width = "250px";
+                sidebar.style.padding = "30px";
+                // toggleBtn.textContent = "Hide";
+  
+            }
+            sidebarOpen = !sidebarOpen;
+        }
+    </script>
     <script src="assets/js/main.js"></script>
  
     <!-- ====== ionicons ======= -->
