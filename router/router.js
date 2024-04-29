@@ -97,6 +97,8 @@ router.post('/api/users', async (req, res) => {
               }
           });
       }
+        
+    
     // Create a new user instance with data from the request
     const newUser = new User(req.body);
     // Save the user to the database
@@ -431,7 +433,6 @@ router.post('/dashboard', async (req, res) => {
   }
 });
 
-
 // Handle /dashboard route to dashboard
 router.get('/dashboard', (req, res) => {
   // Check if the user is authenticated
@@ -448,7 +449,7 @@ router.get('/dashboard', (req, res) => {
 router.get('/login', (req, res) => {
   const user = User.find();
   // Clear the user session on the login page
-  req.session.user = null;
+   req.session.user = null;
   // Serve the login.html content
   res.sendFile(path.join(__dirname, '../frontend/log.html'));
 });
@@ -468,8 +469,6 @@ router.get('/timesheet', (req, res) => {
 router.get('/timesheet.css', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/Timesheet.css'));
 });
-
-
 
 //post api to add client
 router.post('/api/add/client', async (req, res) => {
@@ -508,7 +507,6 @@ router.get('/api/add/client', async (req, res) => {
 router.get('/timesheet', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/Addclient.html'));
 });
-
 
 //post api to add client contact 
 router.post('/api/client/contact', async (req, res) => {
@@ -560,14 +558,10 @@ router.get("/selectcompany", async (req, res) => {
   }
 });
 
-
-
 //html of addClient contact
 router.get('/timesheet', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/AddClientContacts.html'));
 });
-
-
 
 //post api to add client requirements 
 router.post('/api/client/req', async (req, res) => {
@@ -642,7 +636,13 @@ router.get('/add/tasks', async (req, res) => {
     // Fetch all tasks from the database
     const tasks = await addTask.find();
     // Return the tasks as JSON response
-    res.status(200).json(tasks);
+    if (tasks.length === 0) {
+      // If no tasks are found, return a specific response
+      res.status(404).json({ message: 'No tasks found' });
+    } else {
+      // Return the tasks as JSON response
+      res.status(200).json(tasks);
+    }
   } catch (error) {
     console.error('Error fetching tasks:', error);
     res.status(500).json({ error: 'Internal Server Error', details: error.message });
@@ -1004,9 +1004,9 @@ document.addEventListener('DOMContentLoaded', () => {
 //api to add taskTitle and description and comments
 router.post('/tasks/:taskTitle', async (req, res) => {
   try {
-    const { taskTitle } = req.params; // Change _id to taskTitle
+    const { taskTitle } = req.params; 
     const { comments } = req.body;
-    let task = await addTask.findOne({ taskTitle }); // Change _id to taskTitle
+    let task = await addTask.findOne({ taskTitle }); 
     if (!task) {
       return res.status(404).json({ error: 'Task not found' });
     }
@@ -1029,9 +1029,6 @@ router.post('/tasks/:taskTitle', async (req, res) => {
     res.status(500).json({ error: 'Failed to add comment to the task' });
   }
 });
-
-
-
 
 
 // router.get('/task-details', async (req, res) => {
