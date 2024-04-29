@@ -11,8 +11,11 @@ const userSchema = new mongoose.Schema({
   annual_ctc: {type: "string"},
   officeEmail: {type:"string" ,required: true,
   unique: true},
-  otp: {type: "string" },
-  createdAt: {type: Date, default: Date.now},
+  otp: { type: String, validate: { validator: function(v) { return /^\d{6}$/.test(v); },message: props => `${props.value} is not a valid OTP!`},},
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
   workLocation: {type:"string"},
   mobileNo: { type: Number, validate: { validator: function(v) { return /^\d{10}$/.test(v);},message: props => `${props.value} is not a valid 10-digit mobile number!`}},
   personal_Email: {type:"string"},
