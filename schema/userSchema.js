@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   department: {type:"string", required: true},
   bloodGroup: {type:"string"},
   dateOfJoining: {type: "string"},
+  dateOfBirth: {type: "string"},
   workType: {type:"string"},
   annual_ctc: {type: "string"},
   officeEmail: {type:"string" ,required: true,
