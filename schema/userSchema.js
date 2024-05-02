@@ -37,6 +37,7 @@ const userSchema = new mongoose.Schema({
   costCenter:{type: "string"},
   Grade :{type: "string"},
   Location:{type: "string"},
+  company:{type: "string"},
   Shift:{type: "string"},
   holidayCategory:{type: "string"},
   panNumber:{type: "string"},
