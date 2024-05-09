@@ -17,11 +17,14 @@ app.use(cors());
 //app.use(bodyParser.json());
 app.use(express.json());
 app.set('view engine', 'ejs');
+const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
 
 // Connect to MongoDB using Mongoose
 mongoose.connect('mongodb+srv://madabhavipriyanka62:venwkNcLMK3gjCOr@cluster0.0n9xq0f.mongodb.net/mydb', {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  
 });
 //Storing Timestamps only time in Databases using Mongoose  
 const now = new Date();
@@ -37,6 +40,8 @@ db.once('open', () => {
 
 // Use the userRoute for handling user-related routes
 app.use(userRoute);
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -6,13 +6,6 @@ const addTaskSchema = new mongoose.Schema({
   taskTitle: {type:"string", required: true},
   description: {type:"string"},
   addTeam: {type: [String], required: true},
-  comments: [{
-    text: {type: [String], required: true, active: Boolean},
-    createdAt: {
-        type: Date,
-        default: Date.now 
-    }
-}],
   //addTimeStamp :{type:date}
   createdAt: {
     type: Date,

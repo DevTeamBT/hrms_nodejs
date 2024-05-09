@@ -8,6 +8,8 @@ const addClient = require('../schema/addClientSchema');
 const clientContact = require('../schema/clientContactSchema');
 const clientRequirement = require('../schema/clientRequirementSchema');
 const addTask = require('../schema/addTaskSchema');
+const Comments = require('../schema/taskCommentsSchema');
+const FeedBack = require('../schema/feedBackSchema');
 const fs = require('fs').promises;
 const path = require('path');
 const bcrypt = require('bcryptjs');
@@ -73,32 +75,6 @@ router.post('/api/users', async (req, res) => {
       if (req.body.officeEmail && !req.body.officeEmail.endsWith('@bodhtree.com')) {
         return res.status(400).json({ error: 'Invalid office email', details: 'Office email must end with @bodhtree.com.' });
       }
-      //uploding  image file and saving its name in database
-      let profileImageName = ''; // Initialize profileImageName variable
-      // Check if files are uploaded
-      if (req.files && req.files.profile_image) {
-          const uploadPath = path.join(__dirname, '../images'); // Construct upload path
-          console.log("Uploading Image");
-          // Check if upload directory exists; if not, create it
-          if (!fs.existsSync(uploadPath)) {
-              fs.mkdirSync(uploadPath);
-          }
-          const file = req.files.profile_image; // Get uploaded file
-          const filename = uuidv4() + path.extname(file.name); // Generate unique filename
-          profileImageName = filename; // Store filename in profileImageName variable
-          // Move uploaded file to upload path
-          file.mv(`${uploadPath}/${filename}`, function(err) {
-              if (err) {
-                  // If there's an error moving the file, send 500 status response with error
-                  return res.status(500).send(err);
-              } else {
-                  // If file upload is successful, send a success message or perform further actions
-                  res.status(200).send("File uploaded successfully");
-              }
-          });
-      }
-        
-    
     // Create a new user instance with data from the request
     const newUser = new User(req.body);
     // Save the user to the database
@@ -131,7 +107,7 @@ router.get('/api/users/:userId', async (req, res) => {
 router.get('/users', async (req, res) => {
   try {
     // Fetch all users and select only the fullName field
-    const users = await User.find().select('fullName');
+    const users = await User.find().select(['fullName', '_id']);
     // Respond with the retrieved users
     res.status(200).json(users);
   } catch (error) {
@@ -143,10 +119,10 @@ router.get('/users', async (req, res) => {
 
 //html and css of sign up page create user
 router.get('/api/users', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/signup_page.html'));
+  res.sendFile(path.join(__dirname, '../frontend/addEmp1.html'));
 });
-router.get('/api/Createuser.css', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/Createuser.css'));
+router.get('/api/1.css', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/1.css'));
 });
 
 //get all api for add employee page
@@ -154,7 +130,7 @@ router.get('/users', async (req, res) => {
   try {
     // Find all users in the database
     const users = await User.find();
-
+    
     if (!users || users.length === 0) {
       return res.status(404).send('<h1>No users found</h1>'); // Send HTML for no users found
     }
@@ -666,8 +642,9 @@ router.get('/add/tasks', async (req, res) => {
 
 
 //getall api all tasks of all teams 
-router.get("/tasks",async (req,res)=>{
+router.get("/tasks", async (req,res)=>{
   try {
+    console.log('tasks');
     const { taskTitle, addTeam } = req.query;
     let query = {};
     // Add criteria if provided
@@ -678,7 +655,14 @@ router.get("/tasks",async (req,res)=>{
       query.addTeam = { $in: Array.isArray(addTeam) ? addTeam : [addTeam] };
     }
     // Find tasks based on criteria
-    const tasks = await addTask.find(query);
+    let tasks = await addTask.find(query).sort({ _id: -1 }).limit(10);
+
+    await Promise.all(tasks.map(async (t, tIndex) => {
+      let tempTeamMembers = await Promise.all(t.addTeam.map(async (u, uIndex) => {
+        let userInfo = await User.findById(u).exec();
+        tasks[tIndex].addTeam[uIndex] = userInfo ? userInfo.fullName : 'No name available!';
+      }));
+    }));
    
    // Respond with HTML table
    res.status(200).send(`
@@ -848,6 +832,15 @@ router.get("/tasks",async (req,res)=>{
   table{
       margin-left: 130px;
   }
+  table tr td span.tag{
+    font-weight: 600;
+    padding: 2px 8px;
+    background: #dddbef;
+    border-radius: 4px;
+    color: #2a2185;
+    line-height: 1;
+    font-size: 14px;
+  }
   </style>
       <nav class="flex-column">
       <ul>
@@ -908,8 +901,7 @@ router.get("/tasks",async (req,res)=>{
                   <a href="#" id="taskTitleDisplay" data-task-id="${tasks._id}" data-description="${tasks.description}" onClick="handleClick(event)">${tasks.taskTitle}</a>
                 </td>
                 <td>${tasks.description}</td>
-                <td>${tasks.addTeam.join(', ')}</td>
-                
+                <td>${tasks.addTeam.map(u => { return '<span class="tag">'+u+'</span>'; })}</td>
                 </tr>
               `).join('')}
             </tbody>
@@ -943,6 +935,7 @@ router.get("/tasks",async (req,res)=>{
       async function retrieveTaskData(taskId) {
           try {
               const response = await fetch('http://localhost:4000/taskTitlePage/taskId');
+              console.log(response);
               if (response.ok) {
                   const taskData = await response.json();
                   const currentDate = new Date().toISOString();
@@ -1001,34 +994,50 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-//api to add taskTitle and description and comments
-router.post('/tasks/:taskTitle', async (req, res) => {
+//api to add comments using _id 
+router.post('/api/comments', async (req, res) => {
+   console.log('Request Body:', req.body);
+  var { text, commentedBy, task_id } = req.body;
   try {
-    const { taskTitle } = req.params; 
-    const { comments } = req.body;
-    let task = await addTask.findOne({ taskTitle }); 
-    if (!task) {
-      return res.status(404).json({ error: 'Task not found' });
-    }
-    if (!Array.isArray(task.comments)) {
-      task.comments = [];
-    }
-    const newComments = Array.isArray(comments) ? comments : [comments];
-    for (const newComment of newComments) {
-      if (!newComment.text) {
-        return res.status(400).json({ error: 'Text field is required for each comment' });
-      }
-    }
-    newComments.forEach(newComment => {
-      task.comments.push({ text: newComment.text, createdAt: new Date() });
-    });
-    task = await task.save();
-    res.status(200).json(task);
+    const task = await addTask.findById({ _id :task_id });
+    console.log(task_id);
+        if (!task) {
+          
+            return res.status(404).json({ error: 'Task not found' });
+        }
+        const user = await User.findOne({ _id: commentedBy });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        // Extract the fullName from the user
+         const fullName = user.fullName;
+        // var commentedBy = addTask.addTeam;
+        
+      // Create a new comment document
+      const newComment = new Comments({
+           text, 
+           commentedBy: fullName,
+           task_id
+      });
+      console.log(task_id);
+      console.log(commentedBy);
+      console.log(text, commentedBy );
+      // Save the new comment 
+      await newComment.save();
+      // success response
+      res.status(201).json({  text: newComment });
   } catch (error) {
-    console.error('Error adding comment:', error);
-    res.status(500).json({ error: 'Failed to add comment to the task' });
+      // Handle errors and send error response
+      console.error('Error adding comment:', error);
+      res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
+
+
+
 
 
 // router.get('/task-details', async (req, res) => {
@@ -1186,5 +1195,57 @@ router.get('/mydetails', (req, res) => {
 router.get('/organization', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/organization.html'));
 });
+
+
+
+// POST API for feedback
+// router.post('/submit-feedback', async (req, res) => {
+//   try {
+//     const { managerName, employeeName, responses } = req.body;
+//     // Create new feedback document
+//     const feedback = new FeedBack({
+//       managerName,
+//       employeeName,
+//       responses
+//     });
+//     // Save feedback to database
+//     await feedback.save();
+//     res.status(201).json({ message: 'Feedback submitted successfully', feedback });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// });
+
+router.post('/submit-feedback', async (req, res) => {
+  try {
+    const { managerName, employeeName, responses } = req.body;
+  
+    // Create new feedback document
+    const feedback = new FeedBack({
+      managerName,
+      employeeName,
+      responses 
+    });
+    // Save feedback to database
+    await feedback.save();
+    res.status(201).json({ message: 'Feedback submitted successfully', feedback });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+// GET endpoint to retrieve all feedback
+router.get('/feedback', async (req, res) => {
+  try {
+    const allFeedback = await FeedBack.find();
+    res.json(allFeedback);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 
 module.exports = router;
