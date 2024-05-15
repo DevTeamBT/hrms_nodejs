@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Link Display Example</title>
+<style>
+    /* Optional styling for better presentation */
+    #taskContent {
+        margin-top: 20px;
+        display: none; /* Initially hide the content */
+    }
+</style>
+</head>
+<body>
+
+<!-- Example link -->
+<a href="#" id="taskTitleDisplay" data-task-id="example_task_id">Click Me</a>
+
+<div id="taskContent">Content to be displayed when the link is clicked.</div>
+
+<script>
+    // Get reference to the link and the content div
+    var taskLink = document.getElementById("taskTitleDisplay");
+    var taskContentDiv = document.getElementById("taskContent");
+
+    // Add onclick event to the link
+    taskLink.addEventListener("click", function(event) {
+        // Prevent the default behavior of the link (to prevent page reload)
+        event.preventDefault();
+
+        // Toggle the visibility of the content div
+        if (taskContentDiv.style.display === "none") {
+            taskContentDiv.style.display = "block";
+        } else {
+            taskContentDiv.style.display = "none";
+        }
+    });
+</script>
+
+</body>
+</html>

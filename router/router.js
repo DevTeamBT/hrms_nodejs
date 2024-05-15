@@ -15,6 +15,8 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
+const { check, validationResult } = require('express-validator');
 const randomstring = require('randomstring');
 const LocalStrategy = require('passport-local').Strategy;
 const { v4: uuidv4 } = require('uuid');
@@ -1199,42 +1201,46 @@ router.get('/organization', (req, res) => {
 
 
 // POST API for feedback
-// router.post('/submit-feedback', async (req, res) => {
-//   try {
-//     const { managerName, employeeName, responses } = req.body;
-//     // Create new feedback document
-//     const feedback = new FeedBack({
-//       managerName,
-//       employeeName,
-//       responses
-//     });
-//     // Save feedback to database
-//     await feedback.save();
-//     res.status(201).json({ message: 'Feedback submitted successfully', feedback });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// });
-
 router.post('/submit-feedback', async (req, res) => {
   try {
+    // Validation for managerName and employeeName fields
     const { managerName, employeeName, responses } = req.body;
-  
-    // Create new feedback document
-    const feedback = new FeedBack({
-      managerName,
-      employeeName,
-      responses 
+    if (!managerName || !/^[a-zA-Z ]+$/.test(managerName)) {
+      return res.status(400).json({ error: 'Manager Name must contain only alphabetic characters' });
+    }
+    if (!employeeName || !/^[a-zA-Z ]+$/.test(employeeName)) {
+      return res.status(400).json({ error: 'Employee Name must contain only alphabetic characters' });
+    }
+    // Creating an array to store all responses
+    const allResponses = [];
+    // Iterate over each question
+    for (let i = 0; i < responses.length; i++) {
+      const response = responses[i];
+      const question = response.question;
+      const options = response.options;
+      const responseObj = {
+        question: question,
+        options: options
+      };
+      allResponses.push(responseObj);
+    }
+    // Create a new instance of the Feedback model
+    const feedbackInstance = new FeedBack({
+      managerName: managerName,
+      employeeName: employeeName,
+      responses: allResponses
     });
-    // Save feedback to database
-    await feedback.save();
-    res.status(201).json({ message: 'Feedback submitted successfully', feedback });
+    // Save the instance to the database
+    await feedbackInstance.save();
+    res.status(201).json({ message: 'Feedback submitted successfully', feedback: feedbackInstance });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
+
 // GET endpoint to retrieve all feedback
 router.get('/feedback', async (req, res) => {
   try {

@@ -456,7 +456,25 @@
           const enterPassword = form.elements['password'].value;
           const role = form.elements['role'].value ;
           const photo = form.elements["profile_image"].files[0];  
-    
+          const probationPeriod = form.elements['password'].value;
+          const confirmationDate = form.elements['password'].value;
+          const aadharNumber = form.elements['password'].value;
+          const emergencyContactNumber = form.elements['password'].value;
+          const fathersName = form.elements['password'].value;
+          const status = form.elements['password'].value;
+          const spouseName = form.elements['password'].value;
+          const division = form.elements['password'].value;
+          const costCenter = form.elements['password'].value;
+          const Grade = form.elements['password'].value;
+          const Location = form.elements['password'].value;
+          const Shift = form.elements['password'].value;
+          const holidayCategory = form.elements['password'].value;
+          const panNumber = form.elements['password'].value;
+          const pfNumber = form.elements['password'].value;
+          const uanNumber = form.elements['password'].value;
+          const paymentType = form.elements['password'].value;
+
+
 
           const data = {
 
@@ -478,6 +496,21 @@
               enterPassword: enterPassword,
               role: role,
               photo: photo,
+              spouseName: spouseName,
+              division: division,
+              costCenter: costCenter,
+              status:status,
+              fathersName:fathersName,
+              emergencyContactNumber:emergencyContactNumber,
+              aadharNumber:aadharNumber,
+              confirmationDate:confirmationDate,
+              Grade:Grade,
+              Location:Location,
+              Shift:Shift,
+              holidayCategory:holidayCategory,
+              panNumber:panNumber,
+              uanNumber:uanNumber,
+              paymentType:paymentType
             };
           console.log('Data:', data);
 

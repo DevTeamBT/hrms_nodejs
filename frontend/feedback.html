@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+ 
+<html lang="en">
+ 
+<head>
+ 
+  <meta charset="UTF-8">
+ 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+  <title>Feedback Form</title>
+ 
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+ 
+ 
+  <style>
+ 
+    body {
+      font-family: "Roboto", sans-serif;
+      font-size: larger;
+      font-weight: 500;
+ 
+      background-color : #f8f9fa;
+    }
+ 
+   
+   
+    .parsley-errors-list li {       list-style-type: none;       color: red;     }    
+    .is-invalid {       border-color: #dc3545 !important;     }
+    .is-invalid:after {    
+    content: "\2715";
+    color: red;
+    position: absolute;
+    right: 15px;
+    top: calc(50% - 8px);
+       }
+ 
+    .container {
+ 
+      max-width: 900px;
+      margin: 50px auto;
+ 
+    }
+    #managerName{
+      max-width: 600px;
+    }
+    #employeeName{
+      max-width: 600px;
+    }
+    .radio{
+      position: fixed;
+    }
+ 
+    h2{
+      text-align: center;
+    }
+    .form-check-label{
+      font-weight: 400;
+    }
+ 
+  </style>
+ 
+</head>
+ 
+<body>
+ 
+ 
+ 
+<div class="container">
+ 
+  <h2>Feedback Form</h2>
+ 
+  <form id="feedbackForm" data-parsley-trigger="submit" action="/submit-feedback" method="post">
+ 
+    <div class="form-group" >
+ 
+      <label for="managerName">Manager Name:</label>
+ 
+      <input type="text" class="form-control" id="managerName" name="managerName" required data-parsley-pattern="^[a-zA-Z ]+$" data-parsley-required="true" data-parsley-required-message="Manager Name is required" data-parsley-pattern-message="Please enter alphabetic characters only for Manager Name">
+ 
+    </div>
+ 
+    <div class="form-group">
+ 
+      <label for="employeeName">Employee Name:</label>
+ 
+      <input type="text" class="form-control" id="employeeName" name="employeeName" required data-parsley-pattern="^[a-zA-Z ]+$" data-parsley-required="true" data-parsley-required-message="Employee Name is required" data-parsley-pattern-message="Please enter alphabetic characters only for Employee Name">
+ 
+    </div>
+ 
+    <hr>
+ 
+    <h4>Questions:</h4>
+ 
+    <div class="form-group">
+ 
+      <label id="question1" class="required">1. How satisfied are you with the communication from your manager? </label><br>
+ 
+      <div class="form-check form-check-inline mx-3" style="padding-bottom:10px">
+        <div>
+          <input class="form-check-input"  type="radio" name="q1" value="1" required>
+          <label class="form-check-label" style ="padding-right:20px;">1</label>
+ 
+          <input class="form-check-input" type="radio" name="q1" value="2" required>
+          <label class="form-check-label" style ="padding-right:20px;">2</label>
+ 
+          <input class="form-check-input" type="radio" name="q1" value="3" required>
+          <label class="form-check-label" style ="padding-right:20px;">3</label>
+ 
+          <input class="form-check-input" type="radio" name="q1" value="4" required>
+          <label class="form-check-label" style ="padding-right:20px">4</label>
+ 
+          <input class="form-check-input" type="radio" name="q1" value="5" required>
+          <label class="form-check-label" style ="padding-right:20px;">5</label>
+ 
+          <input class="form-check-input" type="radio" name="q1" value="6" required>
+          <label class="form-check-label" style ="padding-right:20px;">6</label>
+ 
+          <input class="form-check-input" type="radio" name="q1" value="7" required>
+          <label class="form-check-label" style ="padding-right:20px;">7</label>
+ 
+          <input class="form-check-input" type="radio" name="q1" value="8" required>
+          <label class="form-check-label" style ="padding-right:20px;">8</label>
+ 
+          <input class="form-check-input" type="radio" name="q1" value="9" required>
+          <label class="form-check-label" style ="padding-right:20px;">9</label>
+ 
+          <input class="form-check-input" type="radio" name="q1" value="10" required>
+          <label class="form-check-label" style ="padding-right:20px;">10</label>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+ 
+      <label id="question2" class="required">2. Are the goals and expectations of your role clear to you?</label><br>
+ 
+      <div class="form-check form-check-inline mx-3" style="padding-bottom:10px">
+        <div>
+          <input class="form-check-input"  type="radio" name="q2" value="1" required>
+          <label class="form-check-label" style ="padding-right:20px;">1</label>
+ 
+          <input class="form-check-input" type="radio" name="q2" value="2" required>
+          <label class="form-check-label" style ="padding-right:20px;">2</label>
+ 
+          <input class="form-check-input" type="radio" name="q2" value="3" required>
+          <label class="form-check-label" style ="padding-right:20px;">3</label>
+ 
+          <input class="form-check-input" type="radio" name="q2" value="4" required>
+          <label class="form-check-label" style ="padding-right:20px">4</label>
+ 
+          <input class="form-check-input" type="radio" name="q2" value="5" required>
+          <label class="form-check-label" style ="padding-right:20px;">5</label>
+ 
+          <input class="form-check-input" type="radio" name="q2" value="6" required>
+          <label class="form-check-label" style ="padding-right:20px;">6</label>
+ 
+          <input class="form-check-input" type="radio" name="q2" value="7" required>
+          <label class="form-check-label" style ="padding-right:20px;">7</label>
+ 
+          <input class="form-check-input" type="radio" name="q2" value="8" required>
+          <label class="form-check-label" style ="padding-right:20px;">8</label>
+ 
+          <input class="form-check-input" type="radio" name="q2" value="9" required>
+          <label class="form-check-label" style ="padding-right:20px;">9</label>
+ 
+          <input class="form-check-input" type="radio" name="q2" value="10" required>
+          <label class="form-check-label" style ="padding-right:20px;">10</label>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+ 
+      <label id="question3" class="required">3. Do you understand how your performance is measured? </label><br>
+ 
+      <div class="form-check form-check-inline mx-3" style="padding-bottom:10px">
+        <div>
+          <input class="form-check-input"  type="radio" name="q3" value="1" required>
+          <label class="form-check-label" style ="padding-right:20px;">1</label>
+ 
+          <input class="form-check-input" type="radio" name="q3" value="2" required>
+          <label class="form-check-label" style ="padding-right:20px;">2</label>
+ 
+          <input class="form-check-input" type="radio" name="q3" value="3" required>
+          <label class="form-check-label" style ="padding-right:20px;">3</label>
+ 
+          <input class="form-check-input" type="radio" name="q3" value="4" required>
+          <label class="form-check-label" style ="padding-right:20px">4</label>
+ 
+          <input class="form-check-input" type="radio" name="q3" value="5" required>
+          <label class="form-check-label" style ="padding-right:20px;">5</label>
+ 
+          <input class="form-check-input" type="radio" name="q3" value="6" required>
+          <label class="form-check-label" style ="padding-right:20px;">6</label>
+ 
+          <input class="form-check-input" type="radio" name="q3" value="7" required>
+          <label class="form-check-label" style ="padding-right:20px;">7</label>
+ 
+          <input class="form-check-input" type="radio" name="q3" value="8" required>
+          <label class="form-check-label" style ="padding-right:20px;">8</label>
+ 
+          <input class="form-check-input" type="radio" name="q3" value="9" required>
+          <label class="form-check-label" style ="padding-right:20px;">9</label>
+ 
+          <input class="form-check-input" type="radio" name="q3" value="10" required>
+          <label class="form-check-label" style ="padding-right:20px;">10</label>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+ 
+      <label id="question4" class="required">4. Do you think your manager cares about you as a person?</label><br>
+ 
+      <div class="form-check form-check-inline mx-3" style="padding-bottom:10px">
+        <div>
+          <input class="form-check-input"  type="radio" name="q4" value="1" required>
+          <label class="form-check-label" style ="padding-right:20px;">1</label>
+ 
+          <input class="form-check-input" type="radio" name="q4" value="2" required>
+          <label class="form-check-label" style ="padding-right:20px;">2</label>
+ 
+          <input class="form-check-input" type="radio" name="q4" value="3" required>
+          <label class="form-check-label" style ="padding-right:20px;">3</label>
+ 
+          <input class="form-check-input" type="radio" name="q4" value="4" required>
+          <label class="form-check-label" style ="padding-right:20px">4</label>
+ 
+          <input class="form-check-input" type="radio" name="q4" value="5" required>
+          <label class="form-check-label" style ="padding-right:20px;">5</label>
+ 
+          <input class="form-check-input" type="radio" name="q4" value="6" required>
+          <label class="form-check-label" style ="padding-right:20px;">6</label>
+ 
+          <input class="form-check-input" type="radio" name="q4" value="7" required>
+          <label class="form-check-label" style ="padding-right:20px;">7</label>
+ 
+          <input class="form-check-input" type="radio" name="q4" value="8" required>
+          <label class="form-check-label" style ="padding-right:20px;">8</label>
+ 
+          <input class="form-check-input" type="radio" name="q4" value="9" required>
+          <label class="form-check-label" style ="padding-right:20px;">9</label>
+ 
+          <input class="form-check-input" type="radio" name="q4" value="10" required>
+          <label class="form-check-label" style ="padding-right:20px;">10</label>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+ 
+      <label id="question5" class="required">5. Does your manager care about your development?</label><br>
+ 
+      <div class="form-check form-check-inline mx-3" style="padding-bottom:10px">
+        <div>
+          <input class="form-check-input"  type="radio" name="q5" value="1" required>
+          <label class="form-check-label" style ="padding-right:20px;">1</label>
+ 
+          <input class="form-check-input" type="radio" name="q5" value="2" required>
+          <label class="form-check-label" style ="padding-right:20px;">2</label>
+ 
+          <input class="form-check-input" type="radio" name="q5" value="3" required>
+          <label class="form-check-label" style ="padding-right:20px;">3</label>
+ 
+          <input class="form-check-input" type="radio" name="q5" value="4" required>
+          <label class="form-check-label" style ="padding-right:20px">4</label>
+ 
+          <input class="form-check-input" type="radio" name="q5" value="5" required>
+          <label class="form-check-label" style ="padding-right:20px;">5</label>
+ 
+          <input class="form-check-input" type="radio" name="q5" value="6" required>
+          <label class="form-check-label" style ="padding-right:20px;">6</label>
+ 
+          <input class="form-check-input" type="radio" name="q5" value="7" required>
+          <label class="form-check-label" style ="padding-right:20px;">7</label>
+ 
+          <input class="form-check-input" type="radio" name="q5" value="8" required>
+          <label class="form-check-label" style ="padding-right:20px;">8</label>
+ 
+          <input class="form-check-input" type="radio" name="q5" value="9" required>
+          <label class="form-check-label" style ="padding-right:20px;">9</label>
+ 
+          <input class="form-check-input" type="radio" name="q5" value="10" required>
+          <label class="form-check-label" style ="padding-right:20px;">10</label>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+ 
+      <label id="question6" class="required">6. Does management clearly communicate performance expectations?</label><br>
+ 
+      <div class="form-check form-check-inline mx-3" style="padding-bottom:10px">
+        <div>
+          <input class="form-check-input"  type="radio" name="q6" value="1" required>
+          <label class="form-check-label" style ="padding-right:20px;">1</label>
+ 
+          <input class="form-check-input" type="radio" name="q6" value="2" required>
+          <label class="form-check-label" style ="padding-right:20px;">2</label>
+ 
+          <input class="form-check-input" type="radio" name="q6" value="3" required>
+          <label class="form-check-label" style ="padding-right:20px;">3</label>
+ 
+          <input class="form-check-input" type="radio" name="q6" value="4" required>
+          <label class="form-check-label" style ="padding-right:20px">4</label>
+ 
+          <input class="form-check-input" type="radio" name="q6" value="5" required>
+          <label class="form-check-label" style ="padding-right:20px;">5</label>
+ 
+          <input class="form-check-input" type="radio" name="q6" value="6" required>
+          <label class="form-check-label" style ="padding-right:20px;">6</label>
+ 
+          <input class="form-check-input" type="radio" name="q6" value="7" required>
+          <label class="form-check-label" style ="padding-right:20px;">7</label>
+ 
+          <input class="form-check-input" type="radio" name="q6" value="8" required>
+          <label class="form-check-label" style ="padding-right:20px;">8</label>
+ 
+          <input class="form-check-input" type="radio" name="q6" value="9" required>
+          <label class="form-check-label" style ="padding-right:20px;">9</label>
+ 
+          <input class="form-check-input" type="radio" name="q6" value="10" required>
+          <label class="form-check-label" style ="padding-right:20px;">10</label>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+ 
+      <label id="question7" class="required">7.Does management explain the reasons behind decisions made?</label><br>
+ 
+      <div class="form-check form-check-inline mx-3" style="padding-bottom:10px">
+        <div>
+          <input class="form-check-input"  type="radio" name="q7" value="1" required>
+          <label class="form-check-label" style ="padding-right:20px;">1</label>
+ 
+          <input class="form-check-input" type="radio" name="q7" value="2" required>
+          <label class="form-check-label" style ="padding-right:20px;">2</label>
+ 
+          <input class="form-check-input" type="radio" name="q7" value="3" required>
+          <label class="form-check-label" style ="padding-right:20px;">3</label>
+ 
+          <input class="form-check-input" type="radio" name="q7" value="4" required>
+          <label class="form-check-label" style ="padding-right:20px">4</label>
+ 
+          <input class="form-check-input" type="radio" name="q7" value="5" required>
+          <label class="form-check-label" style ="padding-right:20px;">5</label>
+ 
+          <input class="form-check-input" type="radio" name="q7" value="6" required>
+          <label class="form-check-label" style ="padding-right:20px;">6</label>
+ 
+          <input class="form-check-input" type="radio" name="q7" value="7" required>
+          <label class="form-check-label" style ="padding-right:20px;">7</label>
+ 
+          <input class="form-check-input" type="radio" name="q7" value="8" required>
+          <label class="form-check-label" style ="padding-right:20px;">8</label>
+ 
+          <input class="form-check-input" type="radio" name="q7" value="9" required>
+          <label class="form-check-label" style ="padding-right:20px;">9</label>
+ 
+          <input class="form-check-input" type="radio" name="q7" value="10" required>
+          <label class="form-check-label" style ="padding-right:20px;">10</label>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+ 
+      <label id="question8" class="required">8. Does your manager explain how the organization’s future plans affect you?</label><br>
+ 
+      <div class="form-check form-check-inline mx-3" style="padding-bottom:10px">
+        <div>
+          <input class="form-check-input"  type="radio" name="q8" value="1" required>
+          <label class="form-check-label" style ="padding-right:20px;">1</label>
+       
+          <input class="form-check-input" type="radio" name="q8" value="2" required>
+          <label class="form-check-label" style ="padding-right:20px;">2</label>
+       
+          <input class="form-check-input" type="radio" name="q8" value="3" required>
+          <label class="form-check-label" style ="padding-right:20px;">3</label>
+       
+          <input class="form-check-input" type="radio" name="q8" value="4" required>
+          <label class="form-check-label" style ="padding-right:20px">4</label>
+       
+          <input class="form-check-input" type="radio" name="q8" value="5" required>
+          <label class="form-check-label" style ="padding-right:20px;">5</label>
+       
+          <input class="form-check-input" type="radio" name="q8" value="6" required>
+          <label class="form-check-label" style ="padding-right:20px;">6</label>
+       
+          <input class="form-check-input" type="radio" name="q8" value="7" required>
+          <label class="form-check-label" style ="padding-right:20px;">7</label>
+       
+          <input class="form-check-input" type="radio" name="q8" value="8" required>
+          <label class="form-check-label" style ="padding-right:20px;">8</label>
+       
+          <input class="form-check-input" type="radio" name="q8" value="9" required>
+          <label class="form-check-label" style ="padding-right:20px;">9</label>
+       
+          <input class="form-check-input" type="radio" name="q8" value="10" required>
+          <label class="form-check-label" style ="padding-right:20px;">10</label>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+ 
+      <label id="question9" class="required">9. How frequently do you receive recognition from your manager?</label><br>
+ 
+      <div class="form-check form-check-inline mx-3" style="padding-bottom:10px">
+        <div>
+          <input class="form-check-input"  type="radio" name="q9" value="1" required>
+          <label class="form-check-label" style ="padding-right:20px;">1</label>
+ 
+          <input class="form-check-input" type="radio" name="q9" value="2" required>
+          <label class="form-check-label" style ="padding-right:20px;">2</label>
+ 
+ 
+          <input class="form-check-input" type="radio" name="q9" value="3" required>
+          <label class="form-check-label" style ="padding-right:20px;">3</label>
+ 
+          <input class="form-check-input" type="radio" name="q9" value="4" required>
+          <label class="form-check-label" style ="padding-right:20px">4</label>
+ 
+          <input class="form-check-input" type="radio" name="q9" value="5" required>
+          <label class="form-check-label" style ="padding-right:20px;">5</label>
+ 
+          <input class="form-check-input" type="radio" name="q9" value="6" required>
+          <label class="form-check-label" style ="padding-right:20px;">6</label>
+ 
+          <input class="form-check-input" type="radio" name="q9" value="7" required>
+          <label class="form-check-label" style ="padding-right:20px;">7</label>
+ 
+          <input class="form-check-input" type="radio" name="q9" value="8" required>
+          <label class="form-check-label" style ="padding-right:20px;">8</label>
+ 
+          <input class="form-check-input" type="radio" name="q9" value="9" required>
+          <label class="form-check-label" style ="padding-right:20px;">9</label>
+ 
+          <input class="form-check-input" type="radio" name="q9" value="10" required>
+          <label class="form-check-label" style ="padding-right:20px;">10</label>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+ 
+      <label id="question1" class="required">10. The last time you completed a project, did you receive any recognition?</label><br>
+ 
+      <div class="form-check form-check-inline mx-3" style="padding-bottom:10px">
+        <div>
+          <input class="form-check-input"  type="radio" name="q10" value="1" required>
+          <label class="form-check-label" style ="padding-right:20px;">1</label>
+ 
+          <input class="form-check-input" type="radio" name="q10" value="2" required>
+          <label class="form-check-label" style ="padding-right:20px;">2</label>
+ 
+          <input class="form-check-input" type="radio" name="q10" value="3" required>
+          <label class="form-check-label" style ="padding-right:20px;">3</label>
+ 
+          <input class="form-check-input" type="radio" name="q10" value="4" required>
+          <label class="form-check-label" style ="padding-right:20px">4</label>
+ 
+          <input class="form-check-input" type="radio" name="q10" value="5" required>
+          <label class="form-check-label" style ="padding-right:20px;">5</label>
+ 
+          <input class="form-check-input" type="radio" name="q10" value="6" required>
+          <label class="form-check-label" style ="padding-right:20px;">6</label>
+ 
+          <input class="form-check-input" type="radio" name="q10" value="7" required>
+          <label class="form-check-label" style ="padding-right:20px;">7</label>
+ 
+          <input class="form-check-input" type="radio" name="q10" value="8" required>
+          <label class="form-check-label" style ="padding-right:20px;">8</label>
+ 
+          <input class="form-check-input" type="radio" name="q10" value="9" required>
+          <label class="form-check-label" style ="padding-right:20px;">9</label>
+ 
+          <input class="form-check-input" type="radio" name="q10" value="10" required>
+          <label class="form-check-label" style ="padding-right:20px;">10</label>
+        </div>
+      </div>
+    </div>
+     
+    <!-- Repeat the above pattern for each question -->
+ 
+    <button type="submit"  class="btn btn-primary">Submit</button>
+ 
+  </form>
+ 
+</div>
+ 
+ 
+<script>
+ 
+  document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+ 
+    var form = event.target;
+ 
+    if (!form.checkValidity()) {
+ 
+      event.preventDefault();
+ 
+      event.stopPropagation();
+ 
+    }
+ 
+    form.classList.add('was-validated');
+ 
+  });
+ 
+</script>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js"></script>
+ 
+ 
+<script>
+  $(document).ready(function() {
+    $('#feedbackForm').parsley();
+  });
+</script>
+ 
+<script>
+  // Get the form element
+  const form = document.getElementById('feedbackForm');
+  // Add event listener for form submission
+  form.addEventListener('submit', function(event) {
+    // Get all radio button groups
+    const radioGroups = form.querySelectorAll('input[type="radio"][required]');
+    // Check if any radio button group is not checked
+    let isValid = true;
+    radioGroups.forEach(function(group) {
+      const groupName = group.getAttribute('name');
+      const checked = form.querySelector(`input[name="${groupName}"]:checked`);
+      if (!checked) {
+        isValid = false;
+      }
+    });
+    // If any group is not checked, prevent form submission
+    if (!isValid) {
+      event.preventDefault();
+      alert('Please answer all questions.');
+    } else {
+      // Form submission is successful, display the alert
+      alert('Form Submitted Successfully!');
+    }
+  });
+ 
+</script>
+ 
+<script>
+document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const form = event.target;
+    const managerName = form.elements['managerName'].value;
+    const employeeName = form.elements['employeeName'].value;
+    const responses = {}; // Object to store responses with question as key
+    let allQuestionsAnswered = true; // Flag to track if all questions are answered
+
+    // Iterate over radio button groups
+    const radioGroups = form.querySelectorAll('input[type="radio"][required]');
+    radioGroups.forEach(function(group) {
+        const questionLabel = group.closest('.form-group').querySelector('label'); // Get the question label
+        const selectedRadio = form.querySelector(`input[name="${group.name}"]:checked`); // Get the selected radio button
+        if (selectedRadio) {
+            const questionText = questionLabel.textContent;
+            // Check if a response for this question already exists
+            if (!responses.hasOwnProperty(questionText)) {
+                // Create an object representing the response for this question
+                responses[questionText] = {
+                    question: questionText,
+                    options: [
+                        {
+                            label: selectedRadio.nextElementSibling.textContent,
+                            value: selectedRadio.value
+                        }
+                    ]
+                };
+            }
+        } else {
+            // If any question is unanswered, add red border to its label
+            questionLabel.style.color = 'red';
+            allQuestionsAnswered = false;
+        }
+    });
+
+    // If any question is unanswered, prevent form submission
+    if (!allQuestionsAnswered) {
+        alert('Please answer all questions.');
+        return;
+    }
+
+    // Construct the data to be sent
+    const data = {
+        managerName: managerName,
+        employeeName: employeeName,
+        responses: Object.values(responses) // Convert object values to array
+    };
+
+    // Send data to backend API
+    fetch('http://localhost:4000/submit-feedback', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Handle successful response from the backend
+        console.log('Feedback submitted successfully:', data);
+        // Optionally, you can reset the form after successful submission
+        form.reset();
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('There was a problem submitting feedback:', error);
+    });
+});
+
+
+</script>
+ 
+</body>
+ 
+</html>

@@ -7,7 +7,8 @@ const feedBackSchema = new mongoose.Schema({
         employeeName: { type: String, required: true },
         responses: [{
             question: { type: String },
-            answer: { type: Number }
+            // answer: { type: Number }
+            options:[{ label:{ type: String }, value:{ type: String } }]
           }]
 });
 
